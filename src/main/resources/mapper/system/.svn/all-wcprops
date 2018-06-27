@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/xyask_admin/!svn/ver/262/trunk/src/main/resources/mapper/system
+END
+UserPowerMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/xyask_admin/!svn/ver/194/trunk/src/main/resources/mapper/system/UserPowerMapper.xml
+END
+OperateMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/xyask_admin/!svn/ver/162/trunk/src/main/resources/mapper/system/OperateMapper.xml
+END
+UserRoleMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/xyask_admin/!svn/ver/162/trunk/src/main/resources/mapper/system/UserRoleMapper.xml
+END
+TaskMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/xyask_admin/!svn/ver/262/trunk/src/main/resources/mapper/system/TaskMapper.xml
+END
+MenuMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/xyask_admin/!svn/ver/162/trunk/src/main/resources/mapper/system/MenuMapper.xml
+END

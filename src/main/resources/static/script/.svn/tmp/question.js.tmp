@@ -1,0 +1,366 @@
+$(function () {
+    $('.set_frozen').on('click', function () {
+        var self = $(this);
+        var uid = self.attr('tagVal');
+        if (uid == undefined || uid == null) {
+            alert('用户ID不能为空');
+            return;
+        }
+        var cond = {};
+        cond.uid = uid;
+        var taskName = self.attr('taskName');
+        cond.is = taskName;
+        var con;
+        con = confirm("确定要更新用户状态吗？")
+        if (con == true) {
+            $.localAjax('./frozenUserAndExpert', cond, function () {
+                alert('用户状态更新成功');
+            })
+            window.location.href = "/user/question/contentList"
+        }
+    })
+
+
+    $('.set_good').on('click', function () {
+        var self = $(this);
+        var textName=self.text();
+        var questionId = self.attr('tagVal');
+        if (questionId == undefined || questionId == null) {
+            alert('问题ID不能为空');
+            return;
+        }
+        var cond = {};
+        cond.questionId = questionId;
+<<<<<<< .mine
+        var taskName = self.attr('taskName');
+=======
+        var taskName = self.attr('taskName');  
+        var con;
+        if (textName=="设为精华") {
+        	taskName=true
+        	con=confirm("确定要设置精华？")
+		}else{
+			taskName=false
+			con=confirm("确定要取消精华？")
+		}        
+>>>>>>> .r65
+        cond.is = taskName;
+<<<<<<< .mine
+        var con;
+        con = confirm("确定要设置精华操作？")
+        if (con == true) {
+            $.localAjax('./setGood', cond, function () {
+                alert('更新精华状态成功');
+=======
+        if(con==true){
+        	$.localAjax('./setGood', cond, function () {                
+                if (taskName==true) {
+                	alert('设置精华成功');
+                	self.text("取消精华");
+				}else{
+					alert('取消精华成功');
+					self.text("设为精华");
+				}                
+>>>>>>> .r65
+            })
+<<<<<<< .mine
+            window.location.href = "/user/question/contentList"
+=======
+>>>>>>> .r65
+        }
+    })
+
+    $('.set_top').on('click', function () {
+        var self = $(this);
+        var questionId = self.attr('tagVal');
+        if (questionId == undefined || questionId == null) {
+            alert('问题ID不能为空');
+            return;
+        }
+        var taskName = self.attr('taskName');
+        var cond = {};
+        cond.questionId = questionId;
+        cond.is = taskName;
+<<<<<<< .mine
+        var con;
+        con = confirm("确定要改变置顶状态?")
+        if (con == true) {
+            cond.topSort = 0;
+            $.localAjax('./setTop', cond, function () {
+                alert('更新置顶状态成功');
+                window.location.href = "/user/question/contentList"
+            })
+        }
+=======
+        if (taskName=='false') {       	
+            var con;
+            con=confirm("确定要取消置顶")
+            if (con==true) {
+            	var istopStr=document.getElementById("isTop");
+            	var istop=istopStr.value
+            	cond.topSort=0;
+                $.localAjax('./setTop', cond, function () {
+                    alert('更新置顶状态成功');
+                    window.location.href="/user/question/contentList?isTop="+istop;
+                })               
+    		}
+		}else{
+			window.location.href="/user/question/topList?questionId="+questionId
+		}
+>>>>>>> .r65
+    })
+
+
+    $('.del_question').on('click', function () {
+        var self = $(this);
+        var questionId = self.attr('tagVal');
+        if (questionId == undefined || questionId == null) {
+            alert('问题ID不能为空');
+            return;
+        }
+        var con;
+        con = confirm("确定要删除该问题？")
+        if (con == true) {
+            var cond = {};
+            cond.questionId = questionId;
+            $.localAjax('./deleteQuestion', cond, function () {
+                alert('删除成功');
+<<<<<<< .mine
+            })
+            if(window.location.href.indexOf('contentList')>-1){
+                window.location.href = "/user/question/contentList"
+            }else{
+                window.location.href = "/user/question/verifyList"
+            }
+        }
+=======
+                var className='.queList_'+questionId;
+                $(className).remove();
+            })           
+		}
+>>>>>>> .r65
+    })
+
+    $('.answer_question').on('click', function () {
+        var self = $(this);
+        var questionId = self.attr('tagVal');
+        if (questionId == undefined || questionId == null) {
+            alert('问题ID不能为空');
+            return;
+        }
+        window.location.href = "/user/answer/answerAdd?questionId=" + questionId
+    })
+    //修改问题
+    $('.update_question').on('click', function () {
+        var self = $(this);
+        var questionId = self.attr('tagVal');
+        if (questionId == undefined || questionId == null) {
+            alert('问题ID不能为空');
+            return;
+        }
+        window.location.href = "/user/question/toUpadteQuestion?questionId=" + questionId
+    })
+
+    $('.select_question').on('click', function () {
+        var self = $(this);
+        var questionId = self.attr('tagVal');
+        if (questionId == undefined || questionId == null) {
+            alert('问题ID不能为空');
+            return;
+        }
+        window.location.href = "/user/answer/answerList?questionId=" + questionId
+    })
+
+
+    $('.recovery_question').on('click', function () {
+        var self = $(this);
+        var questionId = self.attr('tagVal');
+        if (questionId == undefined || questionId == null) {
+            alert('问题ID不能为空');
+            return;
+        }
+        var cond = {};
+        cond.questionId = questionId;
+        $.localAjax('./recoveryQuestion', cond, function () {
+            alert('恢复成功');
+        })
+        window.location.href = "/user/question/rubbishList"
+    })
+
+    $('.verify_question').on('click', function () {
+        var self = $(this);
+        var questionId = self.attr('tagVal');
+        if (questionId == undefined || questionId == null) {
+            alert('问题ID不能为空');
+            return;
+        }
+        var con;
+        con = confirm("确定审核通过该问题？")
+        if (con == true) {
+            var cond = {};
+            cond.questionId = questionId;
+            $.localAjax('./verifyQuestion', cond, function () {
+                alert('审核通过');
+            })
+            window.location.href = "/user/question/verifyList"
+        }
+
+    })
+    //城市
+    $('.province_sel').on('change', function () {
+        var provinceId = $(this).val();
+        if (provinceId == undefined || provinceId == null || provinceId == '' || provinceId == '选择') {
+            $('.city_sel').empty();
+            return;
+        }
+        var cond = {};
+        cond.provinceId = provinceId;
+        $.localAjax('/user/manage/getCitys', cond, function (result) {
+            $('.city_sel').empty();
+            $('.city_sel').append('<option value="">请选择</option>');
+            $.each(result.data, function (index, obj) {
+                $('.city_sel').append('<option  value="' + obj.id + '">' + obj.name + '</option>');
+            })
+        })
+    })
+    //品牌
+    $('.brand_sel').on('change', function () {
+        var brand_id = $(this).val();
+        if (brand_id == undefined || brand_id == null || brand_id == '' || brand_id == '选择') {
+            $('.car_sel').empty();
+            return;
+        }
+        var cond = {};
+        cond.brandId = brand_id;
+        $.localAjax('/user/manage/getSeries', cond, function (result) {
+            $('.car_sel').empty();
+            $('.car_sel').append('<option value="">请选择</option>');
+            $.each(result.data, function (index, obj) {
+                $('.car_sel').append('<option  value="' + obj.seriesId + '">' + obj.name + '</option>');
+            })
+        })
+    })
+
+
+    //上传图
+    var picArr = new Array();
+    var urlPic = document.getElementById("attachs");
+    if (urlPic != undefined) {
+        var str = urlPic.value;
+        if (str != null && str != '') {
+            picArr = str.split(",")
+        }
+    }
+    $("body").on("change", "#attachImg", function () {
+        var self = $(this);
+        $.picUpload(self.attr("id"), function (result) {
+            picArr.addToArr(result.data, $("#attachs"));
+            $('.pic_after').after(' <img width="100px" src="' + result.data + '" class="del_picture" />')
+        });
+    })
+
+    //删除图片
+    $("body").on("click", ".del_picture", function () {
+        var self = $(this);
+        var srcVal = self.attr('src');
+        picArr.removeByValue(srcVal, $("#attachs"));
+        self.remove();
+
+    })
+
+
+    $("body").on("click", ".fff", function () {
+        var self = $(this);
+        var srcVal = self.attr('src');
+        picArr.removeByValue(srcVal, $("#attachs"));
+        self.remove();
+    })
+
+    //城市
+    $("body").on("change", '.province_select', function () {
+        var provinceId = $(this).val();
+        if (provinceId == undefined || provinceId == null || provinceId == '' || provinceId == '选择') {
+            $('.city_select').empty();
+            return;
+        }
+        var cond = {};
+        cond.provinceId = provinceId;
+        $.localAjax('/user/manage/getCitys', cond, function (result) {
+            $('.city_select').empty();
+            $.each(result.data, function (index, obj) {
+                $('.city_select').append('<option  value="' + obj.id + '">' + obj.name + '</option>');
+            })
+        })
+    })
+
+
+    //品牌
+    $("body").on("change", '.brand_select', function () {
+        var brand_id = $(this).val();
+        if (brand_id == undefined || brand_id == null || brand_id == '' || brand_id == '选择') {
+            $('.car_select').empty();
+            return;
+        }
+        var cond = {};
+        cond.brandId = brand_id;
+        $.localAjax('/user/manage/getSeries', cond, function (result) {
+            $('.car_select').empty();
+            $.each(result.data, function (index, obj) {
+                $('.car_select').append('<option  value="' + obj.seriesId + '">' + obj.name + '</option>');
+            })
+        })
+    })
+
+
+    $("body").on("change", '.car_select', function () {
+        var ids = $(this).val();
+        var checkText = $(this).find("option:selected").text();
+        $('.car_show').append('<span style="border: 1px solid;padding: 5px;" class="span_series_name" tagVal="' + ids + '" >' + checkText + '</span>');
+        $('.car_show').append('<input type="hidden"  name="seriesIds"  value="' + ids + '"  />');
+    })
+
+
+    $("body").on("click", '.span_series_name', function () {
+        var id = $(this).attr("tagVal");
+        $('input[name="seriesIds"]').each(function () {
+            var tempId = $(this).val();
+            if (id == tempId) {
+                $(this).remove();
+                return false;
+            }
+        })
+        $(this).remove();
+    })
+
+    $("#but_create_question").on('click', function () {
+        $.localFormAjax("filter", function (result) {
+            alert('保存成功');
+        })
+    })
+})
+
+function saveTop(id) {
+    var questionId = id;
+    var topSort = document.getElementById("topSort_" + questionId).value;
+    if (questionId == undefined || questionId == null) {
+        alert('问题ID不能为空');
+        return;
+    }
+    var con;
+    var cond = {};
+    if (topSort == undefined || topSort == null || topSort == 0) {
+        con = confirm("确定要将问题：" + questionId + "取消置顶吗");
+        cond.is = false;
+        topSort = 0;
+    } else {
+        con = confirm("确定要将问题：" + questionId + "置顶吗");
+        cond.is = true;
+    }
+    cond.questionId = questionId;
+    cond.topSort = topSort;
+    if (con == true) {
+        $.localAjax('./setTop', cond, function () {
+            alert('更新置顶状态成功');
+        })
+    }
+}

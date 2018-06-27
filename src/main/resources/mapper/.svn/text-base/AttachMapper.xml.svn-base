@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyauto.qa.mapper.AttachMapper">
+    <resultMap id="BaseResultMap" type="com.xyauto.qa.entity.Attach">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="attach_id" jdbcType="BIGINT" property="attachId"/>
+        <result column="type" jdbcType="TINYINT" property="type"/>
+        <result column="target_id" jdbcType="BIGINT" property="targetId"/>
+        <result column="file" jdbcType="VARCHAR" property="file"/>
+        <result column="file_type" jdbcType="TINYINT" property="fileType"/>
+        <result column="created_at" jdbcType="INTEGER" property="createdAt"/>
+        <result column="updated_at" jdbcType="INTEGER" property="updatedAt"/>
+        <result column="deleted_at" jdbcType="INTEGER" property="deletedAt"/>
+    </resultMap>
+
+    <insert id="saveAttach" parameterType="com.xyauto.qa.entity.Attach">
+  insert into attach (type,target_id,file,file_type,created_at,updated_at,deleted_at) 
+  values(#{type},#{targetId},#{file},#{fileType},#{createdAt},#{updatedAt},#{deletedAt})
+  </insert>
+
+
+
+
+    <insert id="saveAttachPicture" parameterType="Attach">
+        <![CDATA[
+        INSERT  INTO  attach
+        SET target_id=#{targetId},
+        type=1,
+        file=#{file},
+        file_type=0,
+        created_at=unix_timestamp(now())
+        ]]>
+    </insert>
+
+
+    <update id="deleteById" parameterType="long">
+    update attach
+    set deleted_at=unix_timestamp(now())
+    WHERE
+    attach_id=#{id}
+  </update>
+
+
+</mapper>

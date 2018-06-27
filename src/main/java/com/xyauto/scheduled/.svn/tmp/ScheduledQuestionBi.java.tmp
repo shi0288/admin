@@ -1,0 +1,36 @@
+package com.xyauto.scheduled;
+
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import com.xyauto.bi.service.IQuestionBIService;
+import com.xyauto.qa.core.annotation.Log;
+
+
+//@Component
+public class ScheduledQuestionBi {
+    @Log
+    protected Logger logger;
+	@Autowired
+	private IQuestionBIService questionBIService;
+<<<<<<< .mine
+	@Scheduled(cron="0 10 12 * * ?")
+=======
+//	@Scheduled(cron="0 50 13 * * ?") 
+>>>>>>> .r93
+	private void insertQuestionBi(){
+		try {
+			Thread current = Thread.currentThread();  
+			logger.info("定时任务开启"+current.getId());
+			questionBIService.insertQuestionBI();
+			questionBIService.insertQuestionTypeBI();
+			questionBIService.insertQuestionUserBI();
+			logger.info("定时任务结束");
+		} catch (Exception e) {
+			logger.error("定时任务统计BI数据出错："+e);
+		}
+
+	}
+}

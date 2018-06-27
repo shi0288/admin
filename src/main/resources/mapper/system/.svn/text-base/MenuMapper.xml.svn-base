@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyauto.system.mapper.MenuMapper">
+	<resultMap type="com.xyauto.system.entiy.Menu" id="BaseResultMap">
+		<id column="mid" jdbcType="INTEGER" property="mid" />
+		<result column="menu_name" jdbcType="VARCHAR" property="menuName" />
+		<result column="operate_id" jdbcType="INTEGER" property="operateId" />
+		<result column="parent_id" jdbcType="INTEGER" property="parentId" />
+		<result column="created_at" jdbcType="INTEGER" property="createdAt" />
+		<result column="deleted_at" jdbcType="INTEGER" property="deletedAt" />
+	</resultMap>
+	<resultMap type="com.xyauto.system.vo.MenuOperateVo" id="MenuOperateResultMap">
+		<result column="operate_id" jdbcType="INTEGER" property="operateId" />
+		<result column="operate_name" jdbcType="VARCHAR" property="operateName" />
+		<result column="mid" jdbcType="INTEGER" property="mid" />
+		<result column="menu_name" jdbcType="VARCHAR" property="menuName" />
+	</resultMap>
+	<sql id="base_cloumn">
+		mid,menu_name,operate_id,parent_id,created_at,deleted_at
+	</sql>
+	<sql id="base_where">
+		<if test="mid!=null">
+			and mid=#{mid}
+		</if>
+		<if test="menuName!=null and menuName!='' ">
+			and menu_name LIKE concat('%',#{menuName},'%')
+		</if>
+		<if test="operateId!=null">
+			and operate_id=#{operateId}
+		</if>
+		<if test="parentId!=null">
+			and parent_id=#{parentId}
+		</if>
+		<if test="deletedAt!=null and deletedAt>0">
+			and deleted_at &gt; 0
+		</if>
+	</sql>
+	<select id="selectList" parameterType="com.xyauto.system.entiy.Menu"
+		resultMap="BaseResultMap">
+		SELECT
+		<include refid="base_cloumn" />
+		from tbl_qa_system_menu
+		where 1=1
+		<include refid="base_where"/>
+	</select>
+	<insert id="insert" parameterType="com.xyauto.system.entiy.Menu"
+		useGeneratedKeys="true" keyProperty="mid">
+		INSERT into tbl_qa_system_menu
+		(menu_name,operate_id,parent_id,created_at,deleted_at)
+		 VALUES
+		(#{menuName},
+		#{operateId},
+		#{parentId},
+		UNIX_TIMESTAMP(NOW()),
+		0)
+	</insert>
+	<select id="selectMenu" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+	  SELECT
+		<include refid="base_cloumn" />
+		from tbl_qa_system_menu
+		where mid=${_parameter}
+	</select>
+	<update id="updateMenu" parameterType="com.xyauto.system.entiy.Menu">
+	    update tbl_qa_system_menu 
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="operateId!=null ">
+				operate_id = #{operateId},
+			</if>
+			<if test="parentId!=null">
+				parent_id = #{parentId},
+			</if>
+		</trim>
+		where mid=#{mid}
+	</update>
+	<select id="selectMenuOperate" parameterType="com.xyauto.system.entiy.Menu" resultMap="MenuOperateResultMap" >	    
+       SELECT qsm.mid,qsm.menu_name,qso.operate_id,qso.operate_name,
+              qso.url,qso.operate_type 
+       FROM tbl_qa_system_menu qsm
+       LEFT JOIN tbl_qa_system_operate qso ON qsm.operate_id=qso.operate_id
+	</select>
+</mapper>

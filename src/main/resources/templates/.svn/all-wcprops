@@ -1,0 +1,11 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/xyask_admin/!svn/ver/359/trunk/src/main/resources/templates
+END
+login.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/xyask_admin/!svn/ver/196/trunk/src/main/resources/templates/login.ftl
+END

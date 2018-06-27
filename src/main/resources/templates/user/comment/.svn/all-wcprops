@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/xyask_admin/!svn/ver/356/trunk/src/main/resources/templates/user/comment
+END
+commentAdd.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/xyask_admin/!svn/ver/356/trunk/src/main/resources/templates/user/comment/commentAdd.ftl
+END
+commentListCom.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/xyask_admin/!svn/ver/343/trunk/src/main/resources/templates/user/comment/commentListCom.ftl
+END
+commentList.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/xyask_admin/!svn/ver/343/trunk/src/main/resources/templates/user/comment/commentList.ftl
+END

@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/xyask_admin/!svn/ver/356/trunk/src/main/resources/templates/user/answer
+END
+answerList.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/xyask_admin/!svn/ver/221/trunk/src/main/resources/templates/user/answer/answerList.ftl
+END
+hingEnergyList.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/xyask_admin/!svn/ver/206/trunk/src/main/resources/templates/user/answer/hingEnergyList.ftl
+END
+answerCom.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/xyask_admin/!svn/ver/356/trunk/src/main/resources/templates/user/answer/answerCom.ftl
+END
+hingEnergyAnswerCom.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/xyask_admin/!svn/ver/197/trunk/src/main/resources/templates/user/answer/hingEnergyAnswerCom.ftl
+END
+hingEnergyAnswer.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/xyask_admin/!svn/ver/192/trunk/src/main/resources/templates/user/answer/hingEnergyAnswer.ftl
+END
+answerAdd.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/xyask_admin/!svn/ver/343/trunk/src/main/resources/templates/user/answer/answerAdd.ftl
+END
+hingEnergyListCom.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/xyask_admin/!svn/ver/206/trunk/src/main/resources/templates/user/answer/hingEnergyListCom.ftl
+END

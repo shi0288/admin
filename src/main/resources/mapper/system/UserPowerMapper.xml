@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyauto.system.mapper.UserPowerMapper">
+	<resultMap type="com.xyauto.system.entiy.UserPower" id="BaseResultMap">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="uid" jdbcType="BIGINT" property="uid" />
+		<result column="power_id" jdbcType="INTEGER" property="powerId" />
+		<result column="type" jdbcType="TINYINT" property="type" />
+		<result column="created_at" jdbcType="INTEGER" property="createdAt" />
+		<result column="deleted_at" jdbcType="INTEGER" property="deletedAt" />
+	</resultMap>
+
+	<resultMap type="com.xyauto.system.vo.UserPowerVo" id="UserPower_ResultMap">
+		<result column="uid" jdbcType="BIGINT" property="uid" />
+		<result column="user_name" jdbcType="VARCHAR" property="userName" />
+		<result column="power_id" jdbcType="INTEGER" property="powerId" />
+		<result column="power_Name" jdbcType="VARCHAR" property="powerName" />
+		<result column="parent_id" jdbcType="INTEGER" property="parentId" />
+		<result column="url" jdbcType="VARCHAR" property="url" />
+	</resultMap>
+
+	<sql id="Base_Column">
+		id,uid,power_id,type,created_at,deleted_at
+	</sql>
+	<insert id="insertUserPower" parameterType="com.xyauto.system.entiy.UserPower"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT into tbl_qa_system_user_power
+		(uid,power_id,type,created_at,deleted_at) VALUES
+		(#{uid,jdbcType=BIGINT},
+		#{powerId,jdbcType=INTEGER},
+		#{type,jdbcType=TINYINT},
+		UNIX_TIMESTAMP(NOW()),
+		0)
+	</insert>
+	<select id="selectMenuPowerByUid" parameterType="java.lang.Long"
+		resultMap="UserPower_ResultMap">
+		SELECT qsm.mid as power_id,qsm.menu_name as power_Name,
+		qsup.uid,qsu.user_name 
+		from tbl_qa_system_menu qsm
+        LEFT JOIN tbl_qa_system_user_power qsup
+        on qsm.mid=qsup.power_id and qsup.type=1 and qsup.uid=${_parameter}
+        LEFT JOIN tbl_qa_system_user qsu
+        on qsup.uid=qsu.uid 
+        where qsm.parent_id>0 
+	</select>
+	
+	<insert id="saveUserPower" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+	   INSERT into tbl_qa_system_user_power
+		(uid,power_id,type,created_at,deleted_at) VALUES		
+		<foreach  item="item" collection="powerId" index="index"  
+		separator="," >
+		(#{uid,jdbcType=BIGINT},
+		#{item},
+		#{type,jdbcType=TINYINT},
+		UNIX_TIMESTAMP(NOW()),
+		0)		
+		</foreach>			
+	</insert>
+	
+	<delete id="deleteUserPower" parameterType="com.xyauto.system.entiy.UserPower">
+	  DELETE  FROM tbl_qa_system_user_power
+      where uid=#{uid} and type=#{type}
+	</delete>
+	
+	<select id="selectParmentMenu" parameterType="java.lang.Long" resultMap="UserPower_ResultMap">
+	   SELECT DISTINCT(sm.mid) as power_id ,sm.menu_name as power_Name
+       from tbl_qa_system_user_power up,tbl_qa_system_menu m,tbl_qa_system_menu sm
+       where  up.uid=#{_paramete}
+        and m.mid=up.power_id 
+        and m.parent_id=sm.mid
+	</select>
+	
+	<select id="selectPower" parameterType="com.xyauto.system.entiy.UserPower" resultMap="UserPower_ResultMap">
+	  SELECT m.mid as power_id,m.menu_name as power_Name,
+	         m.parent_id,o.url 
+	  from tbl_qa_system_user_power up,tbl_qa_system_menu m,tbl_qa_system_operate o
+      where up.uid=#{uid} 
+      and m.mid=up.power_id 
+      and up.type=#{type} 
+      and m.operate_id=o.operate_id
+	</select>
+	
+</mapper>

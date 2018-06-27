@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyauto.qa.mapper.UserCarMapper">
+	<resultMap id="BaseResultMap" type="com.xyauto.qa.entity.UserCar">
+		<!-- WARNING - @mbg.generated -->
+		<id column="user_car_id" jdbcType="BIGINT" property="userCarId" />
+		<result column="uid" jdbcType="BIGINT" property="uid" />
+		<result column="brand_id" jdbcType="INTEGER" property="brandId" />
+		<result column="series_id" jdbcType="INTEGER" property="seriesId" />
+		<result column="created_at" jdbcType="INTEGER" property="createdAt" />
+		<result column="deleted_at" jdbcType="INTEGER" property="deletedAt" />
+	</resultMap>
+
+
+	<update id="deleteById" parameterType="long">
+		update user_car
+		set deleted_at=unix_timestamp(now())
+		WHERE
+		user_car_id=#{id}
+	</update>
+
+
+	<select id="getAllByUid" parameterType="long" resultMap="BaseResultMap">
+		SELECT *
+		from user_car
+		WHERE uid=#{uid} AND deleted_at=0
+	</select>
+
+
+	<insert id="saveUserCar" parameterType="UserCar">
+        <![CDATA[
+
+        INSERT  INTO  user_car
+        SET uid=#{uid},
+        brand_id=#{brandId},
+        series_id=#{seriesId},
+        created_at=unix_timestamp(now())
+
+        ]]>
+	</insert>
+
+	<insert id="saveUserCarList" parameterType="java.util.List">
+		INSERT INTO user_car
+		(uid,brand_id,series_id,created_at,deleted_at) values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.uid},#{item.brandId},#{item.seriesId},unix_timestamp(now()),0)
+		</foreach>
+	</insert>
+
+
+</mapper>

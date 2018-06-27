@@ -1,0 +1,437 @@
+package com.xyauto.qa.controller;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.xyauto.qa.cons.CommonCons;
+import com.xyauto.qa.cons.ErrorCode;
+import com.xyauto.qa.cons.ViewKeyCons;
+import com.xyauto.qa.entity.Blocks;
+import com.xyauto.qa.service.BlocksService;
+import com.xyauto.qa.util.QaResult;
+import com.xyauto.qa.util.TemplateUtils;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by shiqm on 2017/3/23.
+ */
+@Controller
+@RequestMapping("user/business")
+public class BusinessController extends AjaxBaseController {
+
+	@Autowired
+	private BlocksService blocksService;
+	@Autowired
+	TemplateUtils templateUtils;
+
+	@RequestMapping("pcBannerList")
+	public void pcBannerList(ModelMap modelMap) {
+		modelMap.put("pager", blocksService.getPcBannerList());
+	}
+
+	@RequestMapping("mobileBannerList")
+	public void mobileBannerList(ModelMap modelMap) {
+		modelMap.put("pager", blocksService.getMobileBannerList());
+	}
+
+	@RequestMapping("expertPicList")
+	public void expertPicList(ModelMap modelMap) {
+		modelMap.put("block", blocksService.getExpertPicList());
+	}
+
+	@RequestMapping("businessUserList")
+	public void businessUserList(ModelMap modelMap) {
+		modelMap.put("block", blocksService
+				.getBlockByName(CommonCons.Blocks_Flag.USER_OPERATE_BUSINESS));
+	}
+
+	@RequestMapping(value = "saveExpertPic", method = RequestMethod.POST)
+	@ResponseBody
+	public QaResult saveExpertPic(String content) {
+		if (StringUtils.isEmpty(content)) {
+			return new QaResult(ErrorCode.OVER, "内容不能为空");
+		}
+		Blocks blocks = new Blocks();
+		blocks.setName(CommonCons.Blocks_Flag.EXPERT_PC);
+		List<Blocks> list = blocksService.get(blocks);
+		if (list.size() == 0) {
+			blocks.setContent(content);
+			blocksService.save(blocks);
+		} else {
+			blocks = list.get(0);
+			blocks.setContent(content);
+			blocksService.update(blocks);
+		}
+		return new QaResult();
+	}
+
+	@RequestMapping(value = "saveBusinessUser", method = RequestMethod.POST)
+	@ResponseBody
+	public QaResult saveBusinessUser(String content) {
+		if (StringUtils.isEmpty(content)) {
+			return new QaResult(ErrorCode.OVER, "内容不能为空");
+		}
+
+		Blocks blocks = new Blocks();
+		blocks.setName(CommonCons.Blocks_Flag.USER_OPERATE_BUSINESS);
+		List<Blocks> list = blocksService.get(blocks);
+		if (list.size() == 0) {
+			blocks.setDesc("运营账号");
+			blocks.setContent(content);
+			blocksService.save(blocks);
+		} else {
+			blocks = list.get(0);
+			blocks.setContent(content);
+			blocksService.update(blocks);
+		}
+		return new QaResult();
+	}
+
+	@RequestMapping(value = "saveBanner", method = RequestMethod.POST)
+	@ResponseBody
+	public QaResult saveBanner(String target, String content) {
+		logger.info("保存banner图:" + target);
+		logger.info("内容:" + content);
+		JSONArray jsonArray = JSON.parseArray(content);
+		logger.info("转换:" + jsonArray.toString());
+		// // TODO: 2017/3/24 数据库备份不到数据，测试时再弄
+		// if (true) {
+		// return new QaResult();
+		// }
+		if (StringUtils.isEmpty(target)) {
+			return new QaResult(ErrorCode.OVER, "类型不能为空");
+		}
+		Blocks blocks = new Blocks();
+		if ("PC".equals(target)) {
+			blocks.setName(CommonCons.Blocks_Flag.BANNER_PC);
+		} else if ("MOBILE".equals(target)) {
+			blocks.setName(CommonCons.Blocks_Flag.BANNER_MOBILE);
+		} else {
+			return new QaResult(ErrorCode.OVER, "错误的类型");
+		}
+		List<Blocks> list = blocksService.get(blocks);
+		if (list.size() == 0) {
+			blocks.setContent(content);
+			blocksService.save(blocks);
+		} else {
+			blocks = list.get(0);
+			blocks.setContent(content);
+			blocksService.update(blocks);
+		}
+		return new QaResult();
+	}
+
+	@RequestMapping("noticeList")
+	public void noticeList(ModelMap modelMap) {
+		modelMap.put("pager", blocksService.getPcNoticeList());
+	}
+
+	@RequestMapping(value = "saveNotice", method = RequestMethod.POST)
+	@ResponseBody
+	public QaResult saveNotice(String content) {
+		logger.info("公告保存内容:" + content);
+		JSONArray jsonArray = JSON.parseArray(content);
+		logger.info("转换:" + jsonArray.toString());
+		// TODO: 2017/3/24 数据库备份不到数据，测试时再弄
+		// if (true) {
+		// return new QaResult();
+		// }
+		Blocks blocks = new Blocks();
+		blocks.setName(CommonCons.Blocks_Flag.NOTICE_PC);
+		List<Blocks> list = blocksService.get(blocks);
+		if (list.size() == 0) {
+			blocks.setContent(content);
+			blocksService.save(blocks);
+		} else {
+			blocks = list.get(0);
+			blocks.setContent(content);
+			blocksService.update(blocks);
+		}
+		return new QaResult();
+	}
+
+	@RequestMapping("topic")
+	public void topic(ModelMap modelMap) {
+		modelMap.put("topic", blocksService.getTopic());
+	}
+
+	@RequestMapping(value = "saveTopic", method = RequestMethod.POST)
+	@ResponseBody
+	public QaResult saveTopic(String content) {
+		if (StringUtils.isEmpty(content)) {
+			return new QaResult(ErrorCode.OVER, "内容不能为空");
+		}
+		Blocks blocks = new Blocks();
+		blocks.setName(CommonCons.Blocks_Flag.TOPIC_TODAY);
+		List<Blocks> list = blocksService.get(blocks);
+		if (list.size() == 0) {
+			blocks.setContent(content);
+			blocks.setDesc("今日话题");
+			blocksService.save(blocks);
+		} else {
+			blocks = list.get(0);
+			blocks.setContent(content);
+			blocksService.update(blocks);
+		}
+		return new QaResult();
+	}
+
+	@RequestMapping("informationList")
+	public void informationList(ModelMap modelMap) {
+		modelMap.put("informationList", blocksService.getInformationList());
+	}
+
+	@RequestMapping(value = "savenInformation", method = RequestMethod.POST)
+	@ResponseBody
+	public QaResult savenInformation(String content) {
+		if (StringUtils.isEmpty(content)) {
+			return new QaResult(ErrorCode.OVER, "内容不能为空");
+		}
+		Blocks blocks = new Blocks();
+		blocks.setName(CommonCons.Blocks_Flag.INFORMATION_EXPERT);
+		List<Blocks> list = blocksService.get(blocks);
+		if (list.size() == 0) {
+			blocks.setContent(content);
+			blocksService.save(blocks);
+		} else {
+			blocks = list.get(0);
+			blocks.setContent(content);
+			blocksService.update(blocks);
+		}
+		return new QaResult();
+	}
+
+	@RequestMapping("adver1")
+	public void topic1(ModelMap modelMap) {
+		modelMap.put("adver", blocksService.getAdver1());
+	}
+
+	@RequestMapping(value = "savenAdver1", method = RequestMethod.POST)
+	@ResponseBody
+	public QaResult savenAdver1(String content) {
+		if (StringUtils.isEmpty(content)) {
+			return new QaResult(ErrorCode.OVER, "内容不能为空");
+		}
+		Blocks blocks = new Blocks();
+		blocks.setName(CommonCons.Blocks_Flag.ADVER1_EXPERT);
+		List<Blocks> list = blocksService.get(blocks);
+		if (list.size() == 0) {
+			blocks.setContent(content);
+			blocks.setDesc("广告图1");
+			blocksService.save(blocks);
+		} else {
+			blocks = list.get(0);
+			blocks.setContent(content);
+			blocksService.update(blocks);
+		}
+		return new QaResult();
+	}
+
+	@RequestMapping("userExpertList")
+	public void userExpert(ModelMap modelMap) {
+		modelMap.put("userExpertList", blocksService.getUserExpertList());
+	}
+
+	@RequestMapping(value = "savenuserExpert", method = RequestMethod.POST)
+	@ResponseBody
+	public QaResult savenuserExpert(String content) {
+		if (StringUtils.isEmpty(content)) {
+			return new QaResult(ErrorCode.OVER, "内容不能为空");
+		}
+		Blocks blocks = new Blocks();
+		blocks.setName(CommonCons.Blocks_Flag.USER_EXPERT_HOME);
+		List<Blocks> list = blocksService.get(blocks);
+		if (list.size() == 0) {
+			blocks.setContent(content);
+			blocks.setDesc("首页专家列表");
+			blocksService.save(blocks);
+		} else {
+			blocks = list.get(0);
+			blocks.setContent(content);
+			blocksService.update(blocks);
+		}
+		return new QaResult();
+	}
+
+	@RequestMapping("adver2")
+	public void topic2(ModelMap modelMap) {
+		modelMap.put("adver", blocksService.getAdver2());
+	}
+
+	@RequestMapping(value = "savenAdver2", method = RequestMethod.POST)
+	@ResponseBody
+	public QaResult savenAdver2(String content) {
+		if (StringUtils.isEmpty(content)) {
+			return new QaResult(ErrorCode.OVER, "内容不能为空");
+		}
+		Blocks blocks = new Blocks();
+		blocks.setName(CommonCons.Blocks_Flag.ADVER2_EXPERT);
+		List<Blocks> list = blocksService.get(blocks);
+		if (list.size() == 0) {
+			blocks.setContent(content);
+			blocks.setDesc("广告图2");
+			blocksService.save(blocks);
+		} else {
+			blocks = list.get(0);
+			blocks.setContent(content);
+			blocksService.update(blocks);
+		}
+		return new QaResult();
+	}
+
+	@ModelAttribute("urlObj")
+	public JSONObject getUrlObj() {
+		return super.getUrlObj();
+	}
+
+	@RequestMapping("popularTopicList")
+	public void popularTopic(ModelMap modelMap) {
+		modelMap.put("popularTopicList", blocksService.getPopularTopicList());
+	}
+
+	@RequestMapping(value = "savenPopularTopic", method = RequestMethod.POST)
+	@ResponseBody
+	public QaResult savenPopularTopic(String content) {
+		if (StringUtils.isEmpty(content)) {
+			return new QaResult(ErrorCode.OVER, "内容不能为空");
+		}
+		Blocks blocks = new Blocks();
+		blocks.setName(CommonCons.Blocks_Flag.POPULAR_TOPIC);
+		List<Blocks> list = blocksService.get(blocks);
+		if (list.size() == 0) {
+			blocks.setContent(content);
+			blocksService.save(blocks);
+		} else {
+			blocks = list.get(0);
+			blocks.setContent(content);
+			blocksService.update(blocks);
+		}
+		return new QaResult();
+	}
+
+	@RequestMapping("oneInformationList")
+	public void oneInformation(ModelMap modelMap) {
+		modelMap.put("oneInformationList",
+				blocksService.getOneInformationList());
+	}
+
+	@RequestMapping(value = "saveOneInformation", method = RequestMethod.POST)
+	@ResponseBody
+	public QaResult saveOneInformation(String content) {
+		if (StringUtils.isEmpty(content)) {
+			return new QaResult(ErrorCode.OVER, "内容不能为空");
+		}
+		Blocks blocks = new Blocks();
+		blocks.setName(CommonCons.Blocks_Flag.ONE_INFORMATION);
+		List<Blocks> list = blocksService.get(blocks);
+		if (list.size() == 0) {
+			blocks.setContent(content);
+			blocksService.save(blocks);
+		} else {
+			blocks = list.get(0);
+			blocks.setContent(content);
+			blocksService.update(blocks);
+		}
+		return new QaResult();
+	}
+
+	@RequestMapping("recommendTopic")
+	public void recommendTopicList(ModelMap modelMap) {
+		modelMap.put("pager", blocksService.recommendTopicList());
+	}
+
+	@RequestMapping(value = "saveRecommendTopic", method = RequestMethod.POST)
+	@ResponseBody
+	public QaResult saveRecommendTopic(String content) {
+		if (StringUtils.isEmpty(content)) {
+			return new QaResult(ErrorCode.OVER, "内容不能为空");
+		}
+		Blocks blocks = new Blocks();
+		blocks.setName(CommonCons.Blocks_Flag.recommend_Topic);
+		List<Blocks> list = blocksService.get(blocks);
+		if (list.size() == 0) {
+			blocks.setContent(content);
+			blocksService.save(blocks);
+		} else {
+			blocks = list.get(0);
+			blocks.setContent(content);
+			blocksService.update(blocks);
+		}
+		return new QaResult();
+	}
+
+	@RequestMapping("adverHome")
+	public void adverHomeList(ModelMap modelMap) {
+		modelMap.put("pager",
+				blocksService.getList(CommonCons.Blocks_Flag.Adver_Home));
+		modelMap.put("number", 1);
+	}
+	@RequestMapping("addAdverHome")
+	@ResponseBody
+	public QaResult addAdverHome(int number,ModelMap modelMap) {
+		Blocks blocks = new Blocks();
+		List<Blocks> list=new ArrayList<Blocks>();
+		list.add(blocks);
+		Map map = new HashMap<>();
+		map.put(ViewKeyCons.MANAGE_LIST_SPECIAL_add.getKey(), list);
+		map.put("number", number);
+		return new QaResult(templateUtils.parse(ViewKeyCons.MANAGE_LIST_SPECIAL_add, map));
+		
+	}
+	
+	
+
+	@RequestMapping(value = "saveAdverHome", method = RequestMethod.POST)
+	@ResponseBody
+	public QaResult saveAdverHome(String content) {
+		if (StringUtils.isEmpty(content)) {
+			return new QaResult(ErrorCode.OVER, "内容不能为空");
+		}
+		blocksService.saveBlock(content, CommonCons.Blocks_Flag.Adver_Home);
+		return new QaResult();
+	}
+	
+	@RequestMapping("labelList")
+	public void labelList(ModelMap modelMap) {
+		modelMap.put("block", blocksService
+				.getBlockByName(CommonCons.Blocks_Flag.LABEL_QUESTION));
+	}
+	
+	@RequestMapping(value = "savelabel", method = RequestMethod.POST)
+	@ResponseBody
+	public QaResult savelabelList(String content) {
+		if (StringUtils.isEmpty(content)) {
+			return new QaResult(ErrorCode.OVER, "内容不能为空");
+		}
+		String [] str=content.split(",");
+		JSONObject object=new JSONObject();
+		String con=object.toJSON(str).toString();
+		Blocks blocks = new Blocks();
+		blocks.setName(CommonCons.Blocks_Flag.LABEL_QUESTION);
+		List<Blocks> list = blocksService.get(blocks);
+		if (list.size() == 0) {
+			blocks.setDesc("问题标签");
+			blocks.setContent(con);
+			blocksService.save(blocks);
+		} else {
+			blocks = list.get(0);
+			blocks.setContent(con);
+			blocksService.update(blocks);
+		}
+		return new QaResult();
+	}
+
+}

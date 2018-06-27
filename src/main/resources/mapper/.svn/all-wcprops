@@ -1,0 +1,101 @@
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/xyask_admin/!svn/ver/357/trunk/src/main/resources/mapper
+END
+AdminLogsMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/xyask_admin/!svn/ver/245/trunk/src/main/resources/mapper/AdminLogsMapper.xml
+END
+UserMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/xyask_admin/!svn/ver/331/trunk/src/main/resources/mapper/UserMapper.xml
+END
+QuestionUserBiMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/xyask_admin/!svn/ver/311/trunk/src/main/resources/mapper/QuestionUserBiMapper.xml
+END
+QuestionBiMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/xyask_admin/!svn/ver/311/trunk/src/main/resources/mapper/QuestionBiMapper.xml
+END
+MessageMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/xyask_admin/!svn/ver/206/trunk/src/main/resources/mapper/MessageMapper.xml
+END
+QuestionTypeBiMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/xyask_admin/!svn/ver/311/trunk/src/main/resources/mapper/QuestionTypeBiMapper.xml
+END
+UserApplyMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/xyask_admin/!svn/ver/334/trunk/src/main/resources/mapper/UserApplyMapper.xml
+END
+SeriesMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/xyask_admin/!svn/ver/275/trunk/src/main/resources/mapper/SeriesMapper.xml
+END
+AnswerMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/xyask_admin/!svn/ver/343/trunk/src/main/resources/mapper/AnswerMapper.xml
+END
+UserExamineBiMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/xyask_admin/!svn/ver/311/trunk/src/main/resources/mapper/UserExamineBiMapper.xml
+END
+CommentMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/xyask_admin/!svn/ver/343/trunk/src/main/resources/mapper/CommentMapper.xml
+END
+UserCarMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/xyask_admin/!svn/ver/275/trunk/src/main/resources/mapper/UserCarMapper.xml
+END
+DictionaryMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/xyask_admin/!svn/ver/180/trunk/src/main/resources/mapper/DictionaryMapper.xml
+END
+UserCityMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/xyask_admin/!svn/ver/245/trunk/src/main/resources/mapper/UserCityMapper.xml
+END
+QuestionMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/xyask_admin/!svn/ver/357/trunk/src/main/resources/mapper/QuestionMapper.xml
+END
+CityMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/xyask_admin/!svn/ver/243/trunk/src/main/resources/mapper/CityMapper.xml
+END

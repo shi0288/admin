@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyauto.qa.mapper.UserApplyMapper">
+	<resultMap id="BaseResultMap" type="com.xyauto.qa.entity.UserApply">
+		<!-- WARNING - @mbg.generated -->
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="user_type" jdbcType="TINYINT" property="user_type" />
+		<result column="username" jdbcType="VARCHAR" property="userName" />
+		<result column="gender" jdbcType="TINYINT" property="gender" />
+		<result column="city" jdbcType="VARCHAR" property="city" />
+		<result column="phone" jdbcType="VARCHAR" property="phone" />
+		<result column="weixin" jdbcType="VARCHAR" property="weixin" />
+		<result column="email" jdbcType="VARCHAR" property="email" />
+		<result column="hascar" jdbcType="TINYINT" property="hascar" />
+		<result column="car" jdbcType="VARCHAR" property="car" />
+		<result column="begood_car" jdbcType="VARCHAR" property="begoodCar" />
+		<result column="occupation" jdbcType="VARCHAR" property="occupation" />
+		<result column="identity_images" jdbcType="VARCHAR" property="identityImages" />
+		<result column="card_images" jdbcType="VARCHAR" property="cardImages" />
+		<result column="intro" jdbcType="VARCHAR" property="intro" />
+		<result column="prize" jdbcType="VARCHAR" property="prize" />
+		<result column="created_at" jdbcType="INTEGER" property="created_at" />
+		<result column="deleted_at" jdbcType="INTEGER" property="deleted_at" />
+		<result column="status" jdbcType="TINYINT" property="status" />
+	</resultMap>
+	
+	<select id="selectActiveUserList" parameterType="com.xyauto.qa.entity.UserApply" resultMap="BaseResultMap">
+	   SELECT * from user_apply
+	   where 1=1
+	   <if test="userName!=null and userName!=''">
+	      and username=#{userName}
+	   </if>
+	   <if test="phone!=null and phone!=''">
+	      and phone=#{phone}
+	   </if>
+	   <if test="weixin!=null and weixin!=''">
+	      and weixin=#{weixin}
+	   </if>
+	   <if test="status!=null ">
+	      and status=#{status}
+	   </if>
+	   <if test="user_type!=null ">
+	      and user_type=#{user_type}
+	   </if>		   
+	</select>
+	
+	<select id="selectActiveUser" parameterType="java.lang.Long" resultMap="BaseResultMap">
+	 SELECT * from user_apply
+	 where id=${_parameter}
+	</select>
+	<update id="updateActiveUser" parameterType="com.xyauto.qa.entity.UserApply">
+	   UPDATE user_apply SET  `status`=#{status} where id=#{id} 
+	</update>
+	
+	
+
+</mapper>

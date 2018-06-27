@@ -1,0 +1,148 @@
+<#if  (pager.list)??>
+    <#list pager.list as e>
+<<<<<<< .mine
+    <tr>
+        <td class="no-wrap">${((e.createdAt?number*1000)?number_to_datetime)!''}</td>
+        <td>${(e.questionId)!''}</td>
+        <td>${(e.answerCount)!''}</td>
+        <td>${(e.category.name)!''}</td>
+=======
+    
+    <tr class="queList_${(e.questionId)!''}" align="left" valign="top" style="height:10px">
+        <th style="width:230px;height:10px">${((e.createdAt?number*1000)?number_to_datetime)!''} <br/>
+        </th>
+        <th style="width:330px;height:10px">问题编号:${(e.questionId)!''}</th>
+        <#if e.isGood==1>
+            <th style="width:100px;height:10px" tagVal="${(e.questionId)!''}" class="set_good"  taskName="false" >取消精华</th>
+        <#else>             
+            <th style="width:100px;height:10px" tagVal="${(e.questionId)!''}" class="set_good"  taskName="true" >设为精华</th>       
+        </#if>
+        <#if e.isTop==1>
+            <th style="width:100px;height:10px" tagVal="${(e.questionId)!''}" class="set_top"   taskName="false" >取消置顶:${e.topSort}</th>
+        <#else>
+            <th style="width:100px;height:10px" tagVal="${(e.questionId)!''}" class="set_top"   taskName="true" >设为置顶</th>
+        </#if>
+>>>>>>> .r65
+
+        <td>
+            <#if e.isGood==1>
+                <span class="label label-danger">精华</span>
+            </#if>
+        </td>
+        <td>
+            <#if e.isTop==1>
+                <span class="label label-danger">置顶</span>
+            </#if>
+        </td>
+        <td class="no-wrap">
+            <#if e.isGood==1>
+                <button type="button" tagVal="${(e.questionId)!''}" taskName="false" class="btn btn-xs btn-warning set_good">
+                    取消精华
+                </button>
+            <#else>
+                <button type="button" tagVal="${(e.questionId)!''}" taskName="true" class="btn btn-xs btn-primary set_good">
+                    设为精华
+                </button>
+            </#if>
+            <#if e.isTop==1>
+                <button type="button" tagVal="${(e.questionId)!''}" taskName="false" class="btn btn-xs btn-warning set_top">
+                    取消置顶 ${e.topSort}</button>
+            <#else>
+                <button type="button" tagVal="${(e.questionId)!''}" taskName="true" class="btn btn-xs btn-primary set_top">
+                    设为置顶
+                </button>
+            </#if>
+            <#if e.user.status==-3>
+                <button type="button" tagVal="${(e.uid)!''}" taskName="false" class="btn btn-xs btn-warning set_frozen">
+                    解禁用户
+                </button>
+            <#else>
+                <button type="button" tagVal="${(e.uid)!''}" taskName="true" class="btn btn-xs btn-primary set_frozen">
+                    封禁用户
+                </button>
+            </#if>
+        </td>
+        <td class="no-wrap">
+            <a href="javascript:void(0);" class="btn btn-xs btn-danger del_question"  tagVal="${(e.questionId)!''}" >删除</a>
+            <a href="/user/question/toUpadteQuestion?questionId=${(e.questionId)!''}" class="btn btn-xs btn-primary"  >修改</a>
+        </td>
+        <td class="no-wrap">
+            <a href="/user/answer/answerAdd?questionId=${(e.questionId)!''}" class="btn btn-xs btn-primary" >回答</a>
+            <a href="/user/answer/answerList?questionId=${(e.questionId)!''}" class="btn btn-xs btn-primary"  >看回答</a>
+        </td>
+        <td><#if e.user.type==0>普通用户<#elseif e.user.type==1>标兵<#elseif e.user.type==2>专家<#else>未知</#if></td>
+        <td>${(e.uid)!''}</td>
+        <td>${(e.user.userInfo.data.nick_name)!''}</td>
+        <td><#if (e.series)??><span><#list e.series as series >${(series.name)!''}</#list></span></#if></td>
+        <td>${(e.city.name)!''}</td>
+    </tr>
+<<<<<<< .mine
+    <tr>
+        <td colspan="14">${(e.content)!''}</td>
+=======
+    <tr class="queList_${(e.questionId)!''}" align="left" valign="top" style="height:10px">
+        <th style="width:230px;height:10px"><a href="javascript:void(0);" tagVal="${(e.questionId)!''}" class="del_question">删除</a>|
+            <a href="javascript:void(0);" tagVal="${(e.questionId)!''}" class="select_question">看回答</a>|
+            <a  href="javascript:void(0);" tagVal="${(e.questionId)!''}"   class="answer_question">回答</a>|
+            <a  href="javascript:void(0);" tagVal="${(e.questionId)!''}"   class="update_question">修改</a>
+        </th>
+        <th style="width:330px;height:10px">用户ID:${(e.uid)!''}</th>
+        <th style="width:100px;height:10px" >回答数:${(e.answerCount)!''}</th>                
+        <th style="width:100px;height:10px">提问类型:${(e.category.name)!''}</th>
+        <th style="width:130px;height:10px">问题来源:问答PC</th>
+        <th style="width:130px;height:10px">用户身份:<#if e.user.type==0>普通用户<#elseif e.user.type==1>标兵<#elseif e.user.type==2>专家<#else>未知</#if></th>
+>>>>>>> .r65
+    </tr>
+<<<<<<< .mine
+=======
+    <tr class="queList_${(e.questionId)!''}" align="left" valign="top" style="height:10px">
+        <th style="width:230px;height:10px">用户名:${(e.user.userInfo.data.nick_name)!''}</th>
+        <th style="width:330px;height:10px">关联车型:<#if (e.series)??><span><#list e.series as series >${(series.name)!''}</#list></span></#if></th>
+        <th style="width:100px;height:10px">位置:${(e.city.name)!''}</th>
+        <#if e.isGood==1>
+            <th style="width:100px;height:10px"><span>精华</span></th>
+        <#else>    
+            <th style="width:100px;height:10px"></th>
+        </#if>
+        <#if e.isTop==1>
+            <th style="width:130px;height:10px"><span>置顶</span></th>
+        <#else>    
+            <th style="width:130px;height:10px"></th>    
+        </#if>
+        <th style="width:130px;height:10px"></th>
+    </tr>
+
+>>>>>>> .r65
+<<<<<<< .mine
+    <tr>
+        <td colspan="14">
+            <#if (e.attaches)??>
+                <#list e.attaches as att>
+                <span>${(att.fileType)!'fffff'}</span>
+                    <#if att.fileType==0>
+                        <img width="100" height="100" src="${(att.file)!''}"/>
+                    </#if>
+                </#list>
+            <#else>
+                无图
+=======
+    <tr class="queList_${(e.questionId)!''}">
+        <td >提问:</td>
+        <td colspan="3">${(e.content)!''}</td>
+    </tr>
+    <tr class="queList_${(e.questionId)!''}">        
+            <#if (e.attaches)??>            
+               <#list e.attaches as att>              
+                 <#if att.fileType==0>
+                 <td>
+                    <img   width="100" height="100" src="${(att.file)!''}"  />
+                </td>
+                 </#if>
+               </#list>
+>>>>>>> .r65
+            </#if>
+        </td>
+    </tr>
+    </#list>
+</#if>
+

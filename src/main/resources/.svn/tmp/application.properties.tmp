@@ -1,0 +1,4 @@
+<<<<<<< .mine
+spring.profiles.active=prod
+=======
+spring.profiles.active=dev>>>>>>> .r101

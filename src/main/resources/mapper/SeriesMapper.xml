@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyauto.qa.mapper.SeriesMapper">
+	<resultMap id="BaseResultMap" type="com.xyauto.qa.entity.Series">
+		<!-- WARNING - @mbg.generated -->
+		<id column="series_id" jdbcType="INTEGER" property="seriesId" />
+		<result column="subbrand_id" jdbcType="INTEGER" property="subbrandId" />
+		<result column="brand_id" jdbcType="INTEGER" property="brandId" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="question_count" jdbcType="INTEGER" property="questionCount" />
+		<result column="created_at" jdbcType="INTEGER" property="createdAt" />
+		<result column="img" jdbcType="VARCHAR" property="img" />
+		<result column="urlspell" jdbcType="VARCHAR" property="urlspell" />
+	</resultMap>
+	<select id="selectSeriesByQuestionCount" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT s.series_id,CONCAT(b.`name`,s.`name`) as name
+		,t.question_count from
+		series s,brand b ,(
+		SELECT COUNT(q.question_id)
+		as question_count,qc.series_id from question
+		q,question_car qc
+		where
+		q.question_id =qc.question_id
+		and FROM_UNIXTIME(q.created_at,'%Y%m%d')
+		BETWEEN #{startTime} and #{endTime}
+		and q.deleted_at=0
+		and q.`status` in
+		(1,2)
+		and q.source !=999
+		GROUP BY qc.series_id
+		ORDER BY
+		COUNT(q.question_id) DESC
+		LIMIT 50) t
+		where t.series_id=s.series_id
+		and
+		s.brand_id=b.brand_id
+	</select>
+
+	<select id="selectListBySerieIds" resultMap="BaseResultMap">
+		SELECT * from series s
+		where series_id IN
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">#{item}
+		</foreach>
+	</select>
+</mapper>

@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/xyask_admin/!svn/ver/358/trunk/src/main/java/com/xyauto/qa/service/impl
+END
+BlocksServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/xyask_admin/!svn/ver/229/trunk/src/main/java/com/xyauto/qa/service/impl/BlocksServiceImpl.java
+END
+AdminLogsServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/xyask_admin/!svn/ver/242/trunk/src/main/java/com/xyauto/qa/service/impl/AdminLogsServiceImpl.java
+END
+UserServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/xyask_admin/!svn/ver/335/trunk/src/main/java/com/xyauto/qa/service/impl/UserServiceImpl.java
+END
+SpiderQuestionServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/xyask_admin/!svn/ver/358/trunk/src/main/java/com/xyauto/qa/service/impl/SpiderQuestionServiceImpl.java
+END
+AnswerServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/xyask_admin/!svn/ver/348/trunk/src/main/java/com/xyauto/qa/service/impl/AnswerServiceImpl.java
+END
+CommentServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/xyask_admin/!svn/ver/342/trunk/src/main/java/com/xyauto/qa/service/impl/CommentServiceImpl.java
+END
+MessageServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/xyask_admin/!svn/ver/205/trunk/src/main/java/com/xyauto/qa/service/impl/MessageServiceImpl.java
+END
+DictionaryServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/xyask_admin/!svn/ver/179/trunk/src/main/java/com/xyauto/qa/service/impl/DictionaryServiceImpl.java
+END
+QuestionServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/xyask_admin/!svn/ver/329/trunk/src/main/java/com/xyauto/qa/service/impl/QuestionServiceImpl.java
+END
+UserCityServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/xyask_admin/!svn/ver/244/trunk/src/main/java/com/xyauto/qa/service/impl/UserCityServiceImpl.java
+END
+AdminServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/xyask_admin/!svn/ver/305/trunk/src/main/java/com/xyauto/qa/service/impl/AdminServiceImpl.java
+END
+SeriesServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/xyask_admin/!svn/ver/276/trunk/src/main/java/com/xyauto/qa/service/impl/SeriesServiceImpl.java
+END
+ABaseServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/xyask_admin/!svn/ver/209/trunk/src/main/java/com/xyauto/qa/service/impl/ABaseServiceImpl.java
+END

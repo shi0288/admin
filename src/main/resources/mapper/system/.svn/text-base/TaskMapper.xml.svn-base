@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyauto.system.mapper.TaskMapper">
+	<resultMap type="com.xyauto.system.entiy.Task" id="BaseResultMap">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="target_object" jdbcType="VARCHAR" property="targetObject" />
+		<result column="method_name" jdbcType="VARCHAR" property="methodName" />
+		<result column="job_detail_name" jdbcType="VARCHAR" property="jobDetailName" />
+		<result column="job_group_name" jdbcType="VARCHAR" property="jobGroupName" />
+		<result column="trigger_name" jdbcType="VARCHAR" property="triggerName" />
+		<result column="trigger_group_name" jdbcType="VARCHAR"
+			property="triggerGroupName" />
+		<result column="cron" jdbcType="VARCHAR" property="cron" />
+		<result column="status" jdbcType="TINYINT" property="status" />
+		<result column="success_count" jdbcType="INTEGER" property="successCount" />
+		<result column="faile_count" jdbcType="INTEGER" property="faileCount" />
+		<result column="created_at" jdbcType="INTEGER" property="createdAt" />
+		<result column="updated_at" jdbcType="INTEGER" property="updatedAt" />
+		<result column="desc" jdbcType="VARCHAR" property="desc" />
+		<result column="is_open" jdbcType="TINYINT" property="isOpen" />
+	</resultMap>
+	<sql id="base_cloumn">
+		target_object,method_name,job_detail_name,job_group_name,trigger_name,trigger_group_name,
+		cron,status,success_count,faile_count,created_at,updated_at,is_open,`desc`
+	</sql>
+	<sql id="all_cloumn">
+		id,target_object,method_name,job_detail_name,job_group_name,trigger_name,trigger_group_name,
+		cron,status,success_count,faile_count,created_at,updated_at,is_open,`desc`
+	</sql>
+	<sql id="base_where">
+		<if test="id!=null">
+			and id=#{id}
+		</if>
+		<if test="jobDetailName!=null and jobDetailName !='' ">
+			and job_detail_name=#{jobDetailName}
+		</if>
+		<if test="jobGroupName !=null and jobGroupName !='' ">
+			and job_group_name=#{jobGroupName}
+		</if>
+		<if test="triggerName !=null and triggerName!='' ">
+			and trigger_name=#{triggerName}
+		</if>
+		<if test="triggerGroupName !=null and triggerGroupName !=''">
+			and trigger_group_name=#{triggerGroupName}
+		</if>
+		<if test="isOpen !=null">
+			and is_open =#{isOpen}
+		</if>
+		<if test="desc !=null and desc !=''">
+			and desc LIKE concat('%',#{desc},'%')
+		</if>
+	</sql>
+
+	<insert id="insert" parameterType="com.xyauto.system.entiy.Task"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT into tbl_qa_task
+		(
+		<include refid="base_cloumn"></include>
+		) VALUES
+		(#{targetObject},#{methodName},#{jobDetailName},#{jobGroupName},
+		#{triggerName},#{triggerGroupName},#{cron},0,
+		0,0,UNIX_TIMESTAMP(),0,
+		#{isOpen},#{desc}
+		)
+	</insert>
+	<select id="selectAll" parameterType="com.xyauto.system.entiy.Task"
+		resultMap="BaseResultMap">
+		SELECT
+		<include refid="all_cloumn" />
+		from tbl_qa_task
+		where 1=1
+		<include refid="base_where"></include>
+	</select>
+	<select id="selectOne" parameterType="com.xyauto.system.entiy.Task"
+		resultMap="BaseResultMap">
+		SELECT
+		<include refid="all_cloumn" />
+		from tbl_qa_task
+		where 1=1
+		<include refid="base_where"></include>
+	</select>
+	<update id="update" parameterType="com.xyauto.system.entiy.Task">
+		update tbl_qa_task
+		set
+		<if test="jobDetailName!=null and jobDetailName !='' ">
+			job_detail_name=#{jobDetailName},			
+			job_group_name=#{jobGroupName},
+		</if>
+		<if test="triggerName !=null and triggerName!='' ">
+			trigger_name=#{triggerName},			
+			trigger_group_name=#{triggerGroupName},
+		</if>
+		<if test="cron !=null and cron !=''">
+			cron = #{cron},
+		</if>
+		<if test="status !=null">
+			status = #{status},
+		</if>
+		<if test="successCount !=null ">
+			success_count = #{successCount},
+		</if>
+		<if test="faileCount !=null">
+			faile_count = #{faileCount},
+		</if>
+		<if test="targetObject !=null and targetObject !=''">
+			target_object = #{targetObject},
+		</if>
+		<if test="methodName !=null and methodName !=''">
+			method_name = #{methodName},
+		</if>
+		<if test="isOpen !=null">
+			 is_open =#{isOpen},
+		</if>
+		updated_at=UNIX_TIMESTAMP()
+		where 1=1
+		<if test="id!=null">
+			and id=#{id}
+		</if>
+		
+	</update>
+
+	<delete id="delete" parameterType="java.lang.Long">
+	DELETE from tbl_qa_task where id=${_parameter}
+	</delete>
+
+</mapper>

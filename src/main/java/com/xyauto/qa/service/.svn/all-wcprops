@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/xyask_admin/!svn/ver/358/trunk/src/main/java/com/xyauto/qa/service
+END
+UserService.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/xyask_admin/!svn/ver/335/trunk/src/main/java/com/xyauto/qa/service/UserService.java
+END
+IDictionaryService.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/xyask_admin/!svn/ver/179/trunk/src/main/java/com/xyauto/qa/service/IDictionaryService.java
+END
+FileService.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/xyask_admin/!svn/ver/316/trunk/src/main/java/com/xyauto/qa/service/FileService.java
+END
+IUserCityService.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/xyask_admin/!svn/ver/244/trunk/src/main/java/com/xyauto/qa/service/IUserCityService.java
+END
+QuestionService.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/xyask_admin/!svn/ver/290/trunk/src/main/java/com/xyauto/qa/service/QuestionService.java
+END
+ISpiderQuestionService.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/xyask_admin/!svn/ver/358/trunk/src/main/java/com/xyauto/qa/service/ISpiderQuestionService.java
+END
+IAnswerService.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/xyask_admin/!svn/ver/342/trunk/src/main/java/com/xyauto/qa/service/IAnswerService.java
+END
+SeriesService.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/xyask_admin/!svn/ver/274/trunk/src/main/java/com/xyauto/qa/service/SeriesService.java
+END
+ABaseService.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/xyask_admin/!svn/ver/209/trunk/src/main/java/com/xyauto/qa/service/ABaseService.java
+END
+ICommentService.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/xyask_admin/!svn/ver/342/trunk/src/main/java/com/xyauto/qa/service/ICommentService.java
+END
+BlocksService.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/xyask_admin/!svn/ver/229/trunk/src/main/java/com/xyauto/qa/service/BlocksService.java
+END
+IMessageService.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/xyask_admin/!svn/ver/205/trunk/src/main/java/com/xyauto/qa/service/IMessageService.java
+END
+AdminLogsService.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/xyask_admin/!svn/ver/242/trunk/src/main/java/com/xyauto/qa/service/AdminLogsService.java
+END

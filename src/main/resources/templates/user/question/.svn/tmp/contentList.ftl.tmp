@@ -1,0 +1,303 @@
+<#include "/user/boot_top.ftl"/>
+<div class="panel-body">
+    <ol class="breadcrumb" >
+        <li><a href="##">内容管理</a></li>
+        <li class="active">问题管理</li>
+    </ol>
+    <div class="well">
+        <form  class="table-filter" action="${base}/user/question/contentList"  method="post">
+            <div class="row">
+                <div class="col-md-3">
+                    <input type="text" class="form-control"  value="${(question.questionId)!''}" name="questionId" placeholder="问题ID" />
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control"  value="${nickName!''}" name="nickName" placeholder="用户名" />
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control"  value="${(question.uid)!''}" name="uid" placeholder="用户ID" />
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control"  value="${question.answerCount}" name="answerCount" placeholder="问答状态" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <select name="categoryId"  class="form-control" >
+                        <option value="">问题分类</option>
+                    <#if categoryList??>
+                        <#list categoryList as category>
+                            <option value="${category.categoryId}"
+                                <#if question.categoryId==category.categoryId>
+                                    selected = "selected"
+                                </#if>
+                            >${category.name}</option>
+                        </#list>
+                    </#if>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select name="userType" class="form-control" >
+                        <option value="">用户身份</option>
+                        <option value="0"
+                        <#if userType??&& userType==0>
+                                selected = "selected"
+                        </#if>
+                        >普通</option>
+                        <option value="1"
+                        <#if userType??&& userType==1>
+                                selected = "selected"
+                        </#if>
+                        >标兵</option>
+                        <option value="2"
+                        <#if userType??&& userType==2>
+                                selected = "selected"
+                        </#if>
+                        >专家</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select name="isTop" class="form-control" >
+                        <option value="">置顶(全部)</option>
+                        <option value="1"
+                        <#if question??&& question.isTop==1>
+                                selected = "selected"
+                        </#if>
+                        >是</option>
+                        <option value="0"
+                        <#if question??&& question.isTop==0>
+                                selected = "selected"
+                        </#if>
+                        >否</option>
+                    </select>
+                </div>
+
+<<<<<<< .mine
+                <div class="col-md-3">
+                    <input  type="text"  class="form-control"  value="${(keyWord)!''}" name="keyWord" placeholder="关键词" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <input value="${startDate!''}" name="startDate" type="text"
+                           class="form-control Wdate" style="height: 34px;"  onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',realDateFmt:'yyyy-MM-dd HH:mm:ss'})" placeholder="开始时间>=" />
+                </div>
+                <div class="col-md-3">
+                    <input value="${endDate!''}" name="endDate" type="text"
+                           class="form-control Wdate" style="height: 34px;" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',realDateFmt:'yyyy-MM-dd HH:mm:ss'})" placeholder="结束时间<=" />
+                </div>
+
+                <div class="col-md-3">
+                    <select class="form-control province_sel">
+                        <option value="">发布省份</option>
+                    <#if (provinceList)??>
+                        <#list  provinceList as province>
+                            <option value="${(province.id)!''}">${(province.name)!''}</option>
+                        </#list>
+                    </#if>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <select name="cityId" class="form-control city_sel">
+                        <option value="">发布城市</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-3">
+                    <select class="form-control brand_sel">
+                        <option value="">品牌选择</option>
+                    <#if (brandList)??>
+                        <#list  brandList as brand>
+                            <option value="${(brand.brandId)!''}">${(brand.name)!''}</option>
+                        </#list>
+                    </#if>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select name="seriesId" class="form-control car_sel">
+                        <option value="">关联车系</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <input class="form-control" type="text" value="${(question.key)!''}" name="key" placeholder="问题加密KEY" />
+                </div>
+
+                <div class="col-md-3">
+                    <select name="isGood" class="form-control">
+                        <option value>精华(全部)</option>
+                        <option
+                        <#if question??&& question.isGood==1>
+                                selected = "selected"
+                        </#if>
+                                value="1">是</option>
+                        <option
+                        <#if question??&& question.isGood==0>
+                                selected = "selected"
+                        </#if>
+=======
+<div class="right_main">
+    <#assign  curName="contentList" />
+    <#include "user/question/menu.ftl" />
+    <div style="clear: both"></div>
+    
+    <ul class="shhide">
+            
+        <!--问题列表 -->
+        <li class="show_hide" style="display: block;position: relative">
+            <!--筛选 -->
+            <div class="right_select">
+                <form action="${base}/user/question/${curName}"  method="post">
+                   <input type="hidden" value="${curName}" name="curName"  id="curName" />                 
+                    <ul>
+                        <li style="width:80px" ><input style="width:80px" type="text" value="${(question.questionId)!''}" name="questionId" placeholder="问题ID"></li>
+                        <li style="width:150px"><input style="width:150px" type="text" value="${nickName!''}" name="nickName" placeholder="用户名"></li>
+                        <li style="width:80px" ><input style="width:80px" type="text" value="${(question.uid)!''}" name="uid" placeholder="用户ID"></li>
+                        <li style="width:80px" ><input style="width:80px" type="text" value="${question.answerCount}" name="answerCount" placeholder="问答状态"></li>
+                        <li style="width:60px">
+                           <select name="categoryId"  style="width:60px"> 
+                                <option value="">问题分类</option>
+                                <#if categoryList??>
+                                    <#list categoryList as category> 
+                                         <option value="${category.categoryId}" 
+                                            <#if question.categoryId==category.categoryId>
+                                               selected = "selected"
+                                            </#if>
+                                         >${category.name}</option>
+                                    </#list>
+                                </#if>
+                           </select>
+                        </li>
+                        <li style="width:60px">         
+                          <select name="userType" style="width:60px"  >
+                                <option value="">用户身份</option>
+                                <option value="0" 
+                                      <#if userType??&& userType==0>
+                                         selected = "selected"
+                                      </#if>
+                                 >普通</option>
+                                <option value="1" 
+                                      <#if userType??&& userType==1>
+                                         selected = "selected"
+                                      </#if>
+                                 >标兵</option>
+                                 <option value="2" 
+                                      <#if userType??&& userType==2>
+                                         selected = "selected"
+                                      </#if>
+                                 >专家</option>
+                           </select>
+                        </li>                         
+                        <li  style="width:80px">                            
+                            <select id="isTop" name="isTop" style="width:80px">
+                                <option value="">置顶(全部)</option>
+                                <option value="1" 
+                                      <#if question??&& question.isTop==1>
+                                         selected = "selected"
+                                      </#if>
+                                 >是</option>
+                                <option value="0" 
+                                      <#if question??&& question.isTop==0>
+                                         selected = "selected"
+                                      </#if>
+                                 >否</option>
+                            </select>
+                        </li> 
+                        <li style="width:150px"><input style="width:150px" type="text" value="${(keyWord)!''}" name="keyWord" placeholder="关键词"></li>                                                                                               
+                        <li style="width:150px"><input style="width:150px" value="${startDate!''}" name="startDate" style="width:220px;" type="text"
+                                                    class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',realDateFmt:'yyyy-MM-dd HH:mm:ss'})" placeholder="开始时间>="></li>
+                        <li style="width:150px"><input style="width:150px" value="${endDate!''}" name="endDate" style="width:220px;" type="text"
+                                                    class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',realDateFmt:'yyyy-MM-dd HH:mm:ss'})" placeholder="结束时间<="></li>                        
+                        <li style="width:160px" > 
+                          <select class="province_sel" style="width:75px">
+                            <option value="">发布省份</option>
+                            <#if (provinceList)??>
+                                <#list  provinceList as province>
+                                    <option value="${(province.id)!''}">${(province.name)!''}</option>
+                                </#list>
+                            </#if>
+                          </select>                     
+                          <select name="cityId" class="city_sel" style="width:80px">
+                            <option value="">发布城市</option>
+                          </select>
+                        </li>
+                        
+                        <li style="width:185px" > 
+                          <select class="brand_sel" style="width:75px">
+                            <option value="">品牌选择</option>
+                            <#if (brandList)??>
+                                <#list  brandList as brand>
+                                    <option value="${(brand.brandId)!''}">${(brand.name)!''}</option>
+                                </#list>
+                            </#if>
+                          </select>                     
+                          <select name="seriesId" class="car_sel" style="width:100px">
+                            <option value="">关联车系</option>
+                          </select>
+                        </li>                        
+                        <li style="width:140px"><input style="width:140px" type="text" value="${(question.key)!''}" name="key" placeholder="问题加密KEY"></li>
+                        <li style="width:60px">
+                            <select name="isGood" style="width:60px"> 
+                                <option value>精华(全部)</option>                              
+                                <option
+                                      <#if question??&& question.isGood==1>
+                                         selected = "selected"
+                                      </#if>                               
+                                 value="1">是</option>
+                                <option 
+                                      <#if question??&& question.isGood==0>
+                                         selected = "selected"
+                                      </#if> 
+>>>>>>> .r65
+                                value="0">否</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-1">
+                    <button type="submit" class="btn btn-primary" > 筛选 </button>
+                </div>
+                <div class="col-md-1 hidden-xs">
+                    <button type="button" class="btn btn-primary" > 导出全部 </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped-3">
+            <thead>
+            <tr>
+                <th>发布时间</th>
+                <th>问题编号</th>
+                <th>回答数</th>
+                <th>提问类型</th>
+                <th>是否精华</th>
+                <th>是否置顶</th>
+                <th>设置</th>
+                <th>操作</th>
+                <th>查看</th>
+                <th>用户身份</th>
+                <th>用户ID</th>
+                <th>用户名</th>
+                <th>关联车型</th>
+                <th>位置</th>
+            </tr>
+            </thead>
+            <tbody>
+            <#include  "/user/question/contentCom.ftl" />
+            </tbody>
+        </table>
+    </div>
+</div>
+<#include "/user/boot_bottom.ftl"/>
+<script type="text/javascript" rel="stylesheet" src="${jsPath}/question.js"></script>
+<script src="${jsPath}/date/WdatePicker.js"></script>
+</body>
+</html>

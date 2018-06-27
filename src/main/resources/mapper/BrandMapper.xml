@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyauto.qa.mapper.BrandMapper">
+  <resultMap id="BaseResultMap" type="com.xyauto.qa.entity.Brand">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="brand_id" jdbcType="INTEGER" property="brandId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="logo" jdbcType="VARCHAR" property="logo" />
+    <result column="question_count" jdbcType="INTEGER" property="questionCount" />
+    <result column="first_letter" jdbcType="CHAR" property="firstLetter" />
+    <result column="created_at" jdbcType="INTEGER" property="createdAt" />
+  </resultMap>
+
+
+  <select id="findBrand"   resultMap="BaseResultMap" parameterType="string" resultType="list" >
+  SELECT *
+        FROM brand
+        WHERE name LIKE CONCAT('%',#{name},'%')
+
+  </select>
+  <select id="selectBrandOrderByName" resultMap="BaseResultMap">
+    SELECT * FROM brand order by  CONVERT( brand.name USING gbk )
+  </select>
+
+
+
+
+</mapper>

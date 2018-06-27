@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/xyask_admin/!svn/ver/235/trunk/src/main/java/com/xyauto/mq
+END
+RabbitMqConfig.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/xyask_admin/!svn/ver/226/trunk/src/main/java/com/xyauto/mq/RabbitMqConfig.java
+END
+IRabbitMqService.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/xyask_admin/!svn/ver/228/trunk/src/main/java/com/xyauto/mq/IRabbitMqService.java
+END

@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/xyask_admin/!svn/ver/359/trunk/src/main/resources/templates/user/manage
+END
+modelListCom.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/xyask_admin/!svn/ver/319/trunk/src/main/resources/templates/user/manage/modelListCom.ftl
+END
+modelList.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/xyask_admin/!svn/ver/319/trunk/src/main/resources/templates/user/manage/modelList.ftl
+END
+frozenUserListCom.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/xyask_admin/!svn/ver/262/trunk/src/main/resources/templates/user/manage/frozenUserListCom.ftl
+END
+expertEdit.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/xyask_admin/!svn/ver/359/trunk/src/main/resources/templates/user/manage/expertEdit.ftl
+END
+frozenUserList.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/xyask_admin/!svn/ver/242/trunk/src/main/resources/templates/user/manage/frozenUserList.ftl
+END
+expertListCom.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/xyask_admin/!svn/ver/319/trunk/src/main/resources/templates/user/manage/expertListCom.ftl
+END
+normalListCom.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/xyask_admin/!svn/ver/319/trunk/src/main/resources/templates/user/manage/normalListCom.ftl
+END
+expertList.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/xyask_admin/!svn/ver/319/trunk/src/main/resources/templates/user/manage/expertList.ftl
+END
+normalList.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/xyask_admin/!svn/ver/345/trunk/src/main/resources/templates/user/manage/normalList.ftl
+END
+activeUserListCom.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/xyask_admin/!svn/ver/333/trunk/src/main/resources/templates/user/manage/activeUserListCom.ftl
+END
+activeUserList.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/xyask_admin/!svn/ver/333/trunk/src/main/resources/templates/user/manage/activeUserList.ftl
+END
+left.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/xyask_admin/!svn/ver/170/trunk/src/main/resources/templates/user/manage/left.ftl
+END
+activeUser.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/xyask_admin/!svn/ver/337/trunk/src/main/resources/templates/user/manage/activeUser.ftl
+END

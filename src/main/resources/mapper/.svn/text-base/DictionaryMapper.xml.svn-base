@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyauto.qa.mapper.DictionaryMapper">
+
+	<resultMap id="BaseResultMap" type="Dictionary">
+		<id property="id" jdbcType="BIGINT" column="id" />
+		<result property="text" jdbcType="VARCHAR" column="text" />
+	</resultMap>
+	<select id="select" parameterType="Dictionary" resultMap="BaseResultMap">
+		SELECT * from dictionary_keywords
+		where 1=1
+		<if test="text!=null and text!=''">
+			and text LIKE concat('%',#{text},'%')
+		</if>
+		order by id desc
+	</select>
+	<insert id="insert" parameterType="Dictionary" useGeneratedKeys="true"
+		keyProperty="id">
+		INSERT into dictionary_keywords (text) VALUES (#{text})
+	</insert>
+	<delete id="delete" parameterType="java.lang.Long">
+	  DELETE from dictionary_keywords where id=#{_parameter}
+	</delete>
+
+
+</mapper>

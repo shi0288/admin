@@ -1,0 +1,324 @@
+<#include "/user/boot_top.ftl"/>
+<div class="panel-body">
+    <ol class="breadcrumb">
+        <li><a href="##">内容管理</a></li>
+        <li class="active">创建问题</li>
+    </ol>
+    <div class="well">
+        <form class="form-horizontal" action="${base}/user/question/createQuestion" method="post" id="filter">
+            <input type="hidden" name="attachs" id="attachs"/>
+           
+            <div class="form-group user_type_select">
+                <label class="col-xs-12 col-md-2 control-label">身份类型:</label>               
+                    <div class="col-xs-6 col-md-1 ">
+                        <label class="radio-inline">
+                            <input type="radio"  name="userType" value="0" checked> 全部
+                        </label>
+                    </div> 
+                    <div class="col-xs-6 col-md-1 ">     
+                        <label class="radio-inline">
+                            <input type="radio" name="userType" value="1" >官方
+                        </label>
+                    </div>      
+            </div>
+                      
+            <div class="form-group">
+                <label for="uid" class="col-md-2 control-label">发布运营号:</label>
+                <div class="col-md-3">
+                    <select id="uid" name="uid" class="form-control uid_select">
+                        <option value="">选择</option>
+                    <#if (businessUserList)??>
+                        <#list  businessUserList as businessUser>
+                            <option value="${(businessUser.user_id)!''}">${(businessUser.nick_name)!''}</option>
+                        </#list>
+                    </#if>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="province_select" class="col-md-2 control-label">发布省份:</label>
+                <div class="col-md-3">
+                    <select id="province_select" class="form-control province_select">
+                        <option>选择</option>
+                    <#if (provinceList)??>
+                        <#list  provinceList as province>
+                            <option value="${(province.id)!''}">${(province.name)!''}</option>
+                        </#list>
+                    </#if>
+                    </select>
+                </div>
+            </div>           
+
+            <div class="form-group">
+                <label for="city_id" class="col-md-2 control-label">城市:</label>
+                <div class="col-md-3">
+                    <select id="city_id" name="city_id" class="form-control  city_select">
+                        <option value="">请先选择省份</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label  class="col-md-2 control-label">发布时间:</label>
+                <div class="col-md-3">
+                       <input  name="releaseTime" id="releaseTime" type="text"
+                           class="form-control Wdate" style="height: 34px;"
+                           onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',realDateFmt:'yyyy-MM-dd HH:mm:ss'})"
+                           />
+                </div>
+            </div>            
+            
+            <div class="form-group ">
+                <label for="questionType" class="col-md-2 control-label">帖子类型:</label>
+                <div class="col-md-3">
+                    <select id="questionType" name="questionType" class="form-control question_type_select">                       
+                        <#if (questionTypeMap)??>
+                            <#list questionTypeMap.keySet() as key>
+                                <option <#if questionTypeMap?? && questionTypeMap==key > selected="selected"</#if> value="${key}">${questionTypeMap.get(key)}</option>
+                            </#list>
+                        </#if>
+                    </select>
+                </div>
+                
+            </div> 
+            
+            
+            <div class="form-group">
+                <label class="col-xs-12 col-md-2 control-label">问题分类:</label>
+            <#if (categoryList)??>
+                <#list  categoryList as cate>
+                    <div class="col-xs-6 col-md-1">
+                        <label class="radio-inline">
+                            <input type="radio" name="category_id" value="${(cate.id)!''}"> ${(cate.name)!''}
+                        </label>
+                    </div>
+                </#list>
+            </#if>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-xs-12 col-md-2 control-label">是否压缩:</label>               
+                    <div class="col-xs-6 col-md-1">
+                        <label class="radio-inline">
+                            <input type="radio"  name="compression" value="1"> 是
+                        </label>
+                        </div> 
+                   <div class="col-xs-6 col-md-1">     
+                        <label class="radio-inline">
+                            <input type="radio" name="compression" value="0" checked> 否
+                        </label>
+                    </div>      
+            </div>
+            <!-- 活动内容板块 -->
+            <div  class="form-group active_select"  style="display:none">
+                <label class="col-xs-12 col-md-2 control-label">活动类型:</label>
+                <div class="col-xs-6 col-md-2 ">
+                     <label class="radio-inline">
+                            <input type="radio" name="activeId" value="1"> 直接报名
+                     </label>   
+                </div>    
+                <div class="col-xs-6 col-md-2 ">
+                     <label class="radio-inline">
+                            <input type="radio" name="activeId" value="2"> 招募活动
+                     </label>   
+                </div> 
+                <div class="col-xs-6 col-md-2 ">
+                     <label class="radio-inline">
+                            <input type="radio" name="activeId" value="3"> 无需报名
+                     </label>   
+                </div>
+                <div class="col-xs-6 col-md-2 ">
+                     <label class="radio-inline">
+                            <input type="radio" name="activeId" value="4"> 话题活动
+                     </label>   
+                </div>
+            </div>
+            
+            <div for="subject_active_select"  class="form-group subject_active_select" style="display:none">
+                <div class="form-group">
+                <label class="col-xs-12 col-md-2 control-label">话题类型:</label>               
+                    <div class="col-xs-6 col-md-1">
+                        <label class="radio-inline">
+                            <input type="radio"  name="subject_type" value="1"> 分享
+                        </label>
+                        </div> 
+                   <div class="col-xs-6 col-md-1">     
+                        <label class="radio-inline">
+                            <input type="radio" name="subject_type" value="2" checked> 提问
+                        </label>
+                    </div>      
+              </div>
+              <div class="form-group">
+                 <label class="col-xs-12 col-md-2 control-label">关联话题:</label>   
+                 <div class="col-md-3">
+                    <input class="form-control"  name="subjet_content" type="text" value=""/>
+                </div>
+              </div>
+            </div>
+            
+            
+            
+            <div for="active_select"  class="form-group active_time" style="display:none">
+                <label  class="col-md-2 control-label">报名时间:</label>
+                <div class="col-md-3">
+                       <input  name="applyStartTime" id="applyStartTime" type="text"
+                           class="form-control Wdate" style="height: 34px;"
+                           onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',realDateFmt:'yyyy-MM-dd HH:mm:ss'})"
+                           />
+                </div>
+                <label  class="col-md-1 control-label">到:</label>
+                <div class="col-md-3">
+                       <input  name="applyEndTime" id="applyEndTime" type="text"
+                           class="form-control Wdate" style="height: 34px;"
+                           onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',realDateFmt:'yyyy-MM-dd HH:mm:ss'})"
+                           />
+                </div>
+            </div> 
+            <div class="form-group active_content_select" style="display:none">      
+                <div class="col-xs-6 col-md-1 col-md-offset-1">
+                     <label class="checkbox-inline">
+                            <input  type="checkbox" onclick="return false" name="contentId" value="username" checked>姓名
+                     </label>   
+                </div>    
+                <div class="col-xs-6 col-md-1">
+                     <label class="checkbox-inline">
+                            <input  type="checkbox" onclick="return false" name="contentId" value="sex" checked>性别
+                     </label>   
+                </div> 
+                <div class="col-xs-6 col-md-2">
+                     <label class="checkbox-inline">
+                            <input  type="checkbox" onclick="return false" name="contentId" value="mobile" checked >手机号
+                     </label>   
+                </div>
+                <div class="col-xs-6 col-md-2 take_part_time_select">
+                     <label class="checkbox-inline">
+                            <input  type="checkbox" name="partakeTimeId" value="4" >参加时间
+                     </label>   
+                </div>
+            </div>
+            <div class="form-group " >                    
+                 <div class="col-xs-6 col-md-4 col-xs-offset-6 col-md-offset-6 take_part_time_content" style="display:none">
+                     <div class="row col-xs-12 col-md-12">
+                          <div class="col-xs-10 col-md-10">
+                               <input style="z-index:0" class="form-control col-xs-10 col-md-10" name="partakeTime" value=""/>
+                          </div>
+                          <div class="col-xs-1 col-md-1">
+                            <button type="button" id="add_partakeTime" class="btn btn-warning add_partakeTime">
+                                添加
+                            </button>
+                          </div>                         
+                     </div>
+                </div> 
+                
+            </div>
+           <!-- 活动内容板块结束 -->
+           <div class="form-group content_select" style="display:none">
+                <label class="col-xs-12 col-md-2 control-label">内容类型:</label>               
+                    <div class="col-xs-6 col-md-1 ">
+                        <label class="radio-inline">
+                            <input type="radio"  name="contentType" value="1"> 图文混排
+                        </label>
+                    </div> 
+                    <div class="col-xs-6 col-md-1 ">     
+                        <label class="radio-inline">
+                            <input type="radio" name="contentType" value="0" checked>一般类型
+                        </label>
+                    </div>      
+            </div>
+            
+            <div class="form-group title_select" style="display:none">
+             <label for="title" class="col-md-2 control-label">内容标题:</label>
+             <div class="col-md-6 ">
+                    <input class="form-control" id="title" name="title"  type="text" value=""/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="content" class="col-md-2 control-label">问题描述:</label>
+                <div class="col-md-8 pub_content">
+                    <textarea class="form-control" id="content" name="content" rows="5"></textarea>
+                </div>
+                <div class="col-sm-offset-2 col-sm-10 pic_content" style="display:none">
+                    <script id="container" name="container" type="text/plain">
+                    </script>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <label for="attachImg" class="btn btn-primary">
+                        上传图片
+                    </label>
+                    <input type="file" name="files" id="attachImg" multiple="true" style="display: none"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10 pic_after">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-2 control-label">品牌:</label>
+                <div class="col-md-3">
+                    <select class="form-control brand_select">
+                        <option>选择</option>
+                    <#list  brandList as brand>
+                        <option value="${brand.brandId}">${brand.name}</option>
+                    </#list>
+                    </select>
+                </div>
+                <label for="find_series" class="col-md-2 control-label">输入查询:</label>
+                <div class="col-md-3">
+                    <input class="form-control" id="find_series" completeSeries type="text" value=""/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-2 control-label">车系:</label>
+                <div class="col-md-3">
+                    <select class="form-control car_select">
+                        <option>请先选择品牌</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-8  car_show">
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <div class="checkbox">
+                        <label>
+                            <input name="is_good" type="checkbox" value="1"/>是否加精
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="button" class="btn btn-primary" id="but_create_question">发布</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+<#include "/user/boot_bottom.ftl"/>
+<script type="text/javascript" rel="stylesheet" src="${jsPath}/question.js"></script>
+<script type="text/javascript" src="${jsPath}/date/WdatePicker.js"></script>
+<#include  "/user/autocomplete.ftl" />
+
+<script type="text/javascript" charset="utf-8" src="${jsPath}/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="${jsPath}/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="${jsPath}/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script>
+    var ue = UE.getEditor('container', { initialFrameHeight:420 });
+</script>
+
+</body>
+</html>

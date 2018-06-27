@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/xyask_admin/!svn/ver/304/trunk/src/main/java/com/xyauto/system/service
+END
+IUserPowerService.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/xyask_admin/!svn/ver/194/trunk/src/main/java/com/xyauto/system/service/IUserPowerService.java
+END
+IOperateService.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/xyask_admin/!svn/ver/162/trunk/src/main/java/com/xyauto/system/service/IOperateService.java
+END
+ITaskService.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/xyask_admin/!svn/ver/252/trunk/src/main/java/com/xyauto/system/service/ITaskService.java
+END
+IMenuService.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/xyask_admin/!svn/ver/162/trunk/src/main/java/com/xyauto/system/service/IMenuService.java
+END

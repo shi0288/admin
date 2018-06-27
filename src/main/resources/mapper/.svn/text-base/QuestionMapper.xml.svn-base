@@ -1,0 +1,910 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyauto.qa.mapper.QuestionMapper">
+	<resultMap id="BaseResultMap" type="com.xyauto.qa.entity.Question">
+		<!-- WARNING - @mbg.generated -->
+		<id column="question_id" jdbcType="BIGINT" property="questionId" />
+		<result column="uid" jdbcType="BIGINT" property="uid" />
+		<result column="category_id" jdbcType="TINYINT" property="categoryId" />
+		<result column="has_attach" jdbcType="TINYINT" property="hasAttach" />
+		<result column="answer_count" jdbcType="INTEGER" property="answerCount" />
+		<result column="answer_users_count" jdbcType="INTEGER"
+			property="answerUsersCount" />
+		<result column="source" jdbcType="INTEGER" property="source" />
+		<result column="is_good" jdbcType="TINYINT" property="isGood" />
+		<result column="good_sort" jdbcType="INTEGER" property="goodSort" />
+		<result column="is_top" jdbcType="TINYINT" property="isTop" />
+		<result column="top_sort" jdbcType="INTEGER" property="topSort" />
+		<result column="first_answered_at" jdbcType="INTEGER" property="firstAnsweredAt" />
+		<result column="lng" jdbcType="REAL" property="lng" />
+		<result column="lat" jdbcType="REAL" property="lat" />
+		<result column="city_id" jdbcType="INTEGER" property="cityId" />
+		<result column="status" jdbcType="TINYINT" property="status" />
+		<result column="report_count" jdbcType="INTEGER" property="reportCount" />
+		<result column="created_at" jdbcType="INTEGER" property="createdAt" />
+		<result column="updated_at" jdbcType="INTEGER" property="updatedAt" />
+		<result column="deleted_at" jdbcType="INTEGER" property="deletedAt" />
+		<result column="key" jdbcType="VARCHAR" property="key" />
+		<result column="deleted_self" jdbcType="INTEGER" property="deletedSelf" />
+		<result column="distrust_reason" jdbcType="VARCHAR" property="distrustReason" />
+		<result column="content" jdbcType="LONGVARCHAR" property="content" />		
+		<result column="title" jdbcType="VARCHAR" property="title" />
+		<result column="cover" jdbcType="VARCHAR" property="cover" />
+		<result column="type" jdbcType="TINYINT" property="type" />
+		<result column="is_html" jdbcType="TINYINT" property="is_html" />
+		<result column="agree_count" jdbcType="INTEGER" property="agree_count" />		
+		<association property="city" javaType="com.xyauto.qa.entity.City">
+			<id property="id" column="city_id" />
+			<result property="name" column="city_name" />
+			<result property="parent" column="parent" />
+		</association>
+		<association property="category" javaType="com.xyauto.qa.entity.Category">
+			<id property="categoryId" column="category_id" />
+			<result property="name" column="category_name" />
+		</association>
+		<association property="user" javaType="com.xyauto.qa.entity.User">
+			<result property="expert_name" column="expert_name" />
+			<result property="expert_avatar" column="expert_avatar" />
+			<result column="type" property="type" />
+			<result column="is_official" property="isOfficial" />
+		</association>
+		<collection property="series" ofType="com.xyauto.qa.entity.Series">
+			<id property="seriesId" column="series_id" />
+			<result property="name" column="series_name" />
+		</collection>
+		<collection property="attaches" ofType="com.xyauto.qa.entity.Attach">
+			<id property="attachId" column="attach_id" />
+			<result property="file" column="file" />
+			<result property="fileType" column="file_type" />
+		</collection>
+
+	</resultMap>
+
+
+	<select id="getQuestionDesc" parameterType="long" resultMap="BaseResultMap">
+		SELECT question.*,
+		city.name as city_name,
+		city.parent as parent,
+		category.name as
+		category_name,
+		series.series_id as
+		series_id,series.name as series_name,
+		attach.attach_id as
+		attach_id,attach.file as
+		file,attach.file_type as file_type
+		from
+		question
+		LEFT JOIN city on
+		question.city_id=city.id
+		LEFT JOIN category on
+		question.category_id=category.category_id
+		LEFT JOIN question_car on
+		question.question_id=question_car.question_id
+		LEFT JOIN series on
+		question_car.series_id=series.series_id
+		LEFT JOIN attach on
+		question.question_id=attach.target_id and
+		attach.deleted_at=0 and
+		attach.type=1
+		WHERE
+		question.deleted_at=0
+		and question.question_id =
+		#{questionId}
+	</select>
+
+
+	<update id="updateQuestion" parameterType="Question">
+		UPDATE question
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="cityId!=null ">
+				city_id = #{cityId},
+			</if>
+			<if test="categoryId!=null">
+				category_id = #{categoryId},
+			</if>
+			<if test="content!=null">
+				content = #{content},
+			</if>
+			<if test="isGood!=null">
+				is_good = #{isGood},
+			</if>
+			<if test="is_html!=null">
+				is_html = #{is_html},
+			</if>
+			<if test="title!=null">
+				title = #{title},
+			</if>	
+			<if test="cover!=null">
+				cover = #{cover}
+			</if>				
+		</trim>
+		
+		WHERE question_id = #{questionId};
+	</update>
+
+
+
+	<select id="getQuestionList" parameterType="Question" resultMap="BaseResultMap">
+		SELECT question.*,
+		city.name as city_name,
+		category.name as
+		category_name,
+		series.series_id as series_id,series.name as
+		series_name,
+		attach.attach_id as attach_id,attach.file as
+		file,attach.file_type as file_type,
+		user.expert_name,user.expert_avatar,user.type,user.is_official
+		from
+		question
+		LEFT JOIN city on
+		question.city_id=city.id
+		LEFT JOIN category on
+		question.category_id=category.category_id
+		LEFT JOIN question_car on
+		question.question_id=question_car.question_id
+		LEFT JOIN series on
+		question_car.series_id=series.series_id
+		LEFT JOIN attach on
+		question.question_id=attach.target_id and
+		attach.deleted_at=0 and
+		attach.type=1
+		LEFT JOIN user on question.uid=user.uid
+		WHERE
+		question.deleted_at=0
+		<if test="questionId!= null ">
+			and question.question_id = #{questionId}
+		</if>
+		<if test="uid!= null ">
+			and question.uid = #{uid}
+		</if>
+		order by question.created_at desc
+	</select>
+
+	<select id="getDelQuestionList" parameterType="Question"
+		resultMap="BaseResultMap">
+		SELECT question.*,
+		city.name as city_name,
+		category.name as
+		category_name,
+		series.series_id as series_id,series.name as
+		series_name,
+		attach.attach_id as attach_id,attach.file as
+		file,attach.file_type as file_type
+		from question
+		LEFT JOIN city on
+		question.city_id=city.id
+		LEFT JOIN category on
+		question.category_id=category.category_id
+		LEFT JOIN question_car on
+		question.question_id=question_car.question_id
+		LEFT JOIN series on
+		question_car.series_id=series.series_id
+		LEFT JOIN attach on
+		question.question_id=attach.target_id and
+		attach.deleted_at=0 and
+		attach.type=1
+		LEFT JOIN user on question.uid=user.uid
+		WHERE
+		question.deleted_at>0
+		<where>
+			<if test="questionId!= null and questionId!= '' ">
+				and question.question_id = #{questionId}
+			</if>
+		</where>
+	</select>
+
+	<update id="updateGood" parameterType="Question">
+		UPDATE question q, (SELECT MAX(good_sort)+1 max_sort from question where deleted_at=0 and is_good=1) b
+		set is_good =#{isGood},
+		<choose>
+			<when test="isGood!= null and isGood==1">
+				q.good_sort =b.max_sort
+			</when>
+			<otherwise>
+				q.good_sort =0
+			</otherwise>
+		</choose>
+		where question_id=#{questionId} ;
+
+	</update>
+
+	<update id="updateTop" parameterType="Question">
+		UPDATE question
+		SET
+		is_top=#{isTop},top_sort=#{topSort}
+		WHERE question_id=#{questionId}
+	</update>
+
+	<update id="updateHasAttach" parameterType="Question">
+		UPDATE question
+		SET
+		has_attach=#{hasAttach}
+		WHERE question_id=#{questionId}
+	</update>
+
+	<update id="deleteQuestionById" parameterType="long">
+		update question
+		set deleted_at=unix_timestamp(now())
+		WHERE
+		question_id=#{questionId}
+	</update>
+
+	<update id="recoveryQuestionById" parameterType="long">
+		update question
+		set deleted_at=0,`status`=1
+		WHERE
+		question_id=#{questionId}
+	</update>
+
+	<update id="verifyQuestionById" parameterType="long">
+		update question
+		set question.status=2
+		WHERE
+		question_id=#{questionId}
+	</update>
+
+	<select id="getQuestionListByMapParam" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT question.*,
+		city.name as city_name,
+		t.name as category_name,
+		series.series_id as series_id,series.name as series_name,
+		attach.attach_id as attach_id,attach.file as file,attach.file_type as
+		file_type,user.expert_name,user.expert_avatar,user.type,user.is_official
+		from question
+		LEFT JOIN city on question.city_id=city.id
+		LEFT
+		JOIN
+		question_car on question.question_id=question_car.question_id
+		LEFT JOIN
+		series on question_car.series_id=series.series_id
+		LEFT JOIN
+		attach on
+		question.question_id=attach.target_id and
+		attach.deleted_at=0 and
+		attach.type=1
+		LEFT JOIN user on question.uid=user.uid
+		LEFT JOIN 
+       (SELECT ct.category_id as sub_id,cf.category_id ,cf.`name` from category ct,category cf
+        where ct.parent=cf.category_id or (ct.category_id=cf.category_id and ct.parent=0) 
+        ) t on question.category_id=t.sub_id 			
+		<!--  
+		LEFT JOIN
+		category ca on question.category_id=ca.category_id
+		LEFT JOIN category cat on
+		(ca.parent = cat.category_id or ca.category_id =
+		cat.category_id)
+		-->
+		WHERE
+		question.deleted_at=0
+		<choose>
+			<when test="status!= null">
+				and question.status=#{status}
+			</when>
+			<otherwise>
+				and question.status in(1,2)
+			</otherwise>
+		</choose>
+		<if test="uid!= null  ">
+			and question.uid= #{uid}
+		</if>
+		<if test="questionId!= null  ">
+			and question.question_id = #{questionId}
+		</if>
+		<if test="categoryId!= null  ">
+			and t.category_id = #{categoryId}
+		</if>
+		<if test="hasAttach!= null  ">
+			and question.has_attach = #{hasAttach}
+		</if>
+		<if test="isTop!= null  ">
+			and question.is_top= #{isTop}
+		</if>
+		<if test="isGood!= null  ">
+			and question.is_good = #{isGood}
+		</if>
+		<if test="cityId!= null  ">
+			and question.city_id = #{cityId}
+		</if>
+		<if test="startTime!= null  ">
+			and question.created_at>= #{startTime}
+		</if>
+		<if test="endTime!= null  ">
+			and question.created_at &lt;= #{endTime}
+		</if>
+		<if test="brandId!= null  ">
+			and question_car.brand_id = #{brandId}
+		</if>
+		<if test="seriesId!= null  ">
+			and series.series_id= #{seriesId}
+		</if>
+		<if test="answerCount!= null  ">
+			and question.answer_count = #{answerCount}
+		</if>
+		<if test="key!= null  and key!=''">
+			and question.key = #{key}
+		</if>
+		<if test="userType != null">
+			and user.type = #{userType}
+		</if>
+		<if test="isOfficial != null">
+			and user.is_official = 1
+		</if>
+		<if test="keyWord!= null  and keyWord!=''">
+			and question.content LIKE concat('%',#{keyWord},'%')
+		</if>
+		<if test="source != null">
+			and question.source = #{source}
+		</if>
+		<if test="expert_name!= null  and expert_name!=''">
+			and user.expert_name = #{expert_name}
+		</if>
+		order by question.created_at desc,attach.file_type
+	</select>
+
+	<select id="getQuestionCountByMapParam" parameterType="java.util.Map"
+		resultType="INTEGER">
+		SELECT count(DISTINCT(question.question_id))
+		from question
+		LEFT JOIN
+		city on question.city_id=city.id
+		LEFT JOIN question_car on
+		question.question_id=question_car.question_id
+		LEFT JOIN series on
+		question_car.series_id=series.series_id
+		LEFT JOIN attach on
+		question.question_id=attach.target_id and
+		attach.deleted_at=0 and
+		attach.type=1
+		LEFT JOIN
+		user on question.uid=user.uid
+		LEFT JOIN category
+		ca on
+		question.category_id=ca.category_id
+		LEFT JOIN category cat on
+		(ca.parent = cat.category_id or ca.category_id =
+		cat.category_id)
+		WHERE
+		question.deleted_at=0
+		<choose>
+			<when test="status!= null">
+				and question.status=#{status}
+			</when>
+			<otherwise>
+				and question.status in(1,2)
+			</otherwise>
+		</choose>
+		<if test="uid!= null  ">
+			and question.uid= #{uid}
+		</if>
+		<if test="questionId!= null  ">
+			and question.question_id = #{questionId}
+		</if>
+		<if test="categoryId!= null  ">
+			and cat.category_id = #{categoryId}
+		</if>
+		<if test="hasAttach!= null  ">
+			and question.has_attach = #{hasAttach}
+		</if>
+		<if test="isTop!= null  ">
+			and question.is_top= #{isTop}
+		</if>
+		<if test="isGood!= null  ">
+			and question.is_good = #{isGood}
+		</if>
+		<if test="cityId!= null  ">
+			and city.id = #{cityId}
+		</if>
+		<if test="startTime!= null  ">
+			and question.created_at>= #{startTime}
+		</if>
+		<if test="endTime!= null  ">
+			and question.created_at &lt;= #{endTime}
+		</if>
+		<if test="brandId!= null  ">
+			and question_car.brand_id = #{brandId}
+		</if>
+		<if test="seriesId!= null  ">
+			and series.series_id= #{seriesId}
+		</if>
+		<if test="answerCount!= null  ">
+			and question.answer_count = #{answerCount}
+		</if>
+		<if test="key!= null  and key!=''">
+			and question.key = #{key}
+		</if>
+		<if test="userType != null">
+			and user.type = #{userType}
+		</if>
+		<if test="isOfficial != null">
+			and user.is_official = 1
+		</if>
+		<if test="keyWord!= null  and keyWord!=''">
+			and question.content LIKE concat('%',#{keyWord},'%')
+		</if>
+		<if test="source != null">
+			and question.source = #{source}
+		</if>
+		<if test="expert_name!= null  and expert_name!=''">
+			and user.expert_name = #{expert_name}
+		</if>
+	</select>
+
+	<select id="getDelQuestionListByMapParam" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT question.*,
+		city.name as city_name,
+		ca.name as category_name,
+		series.series_id as series_id,series.name as series_name,
+		attach.attach_id as attach_id,attach.file as file,attach.file_type as
+		file_type,user.expert_name,user.expert_avatar,user.type,user.is_official
+		from question
+		LEFT JOIN city on question.city_id=city.id
+		LEFT
+		JOIN
+		question_car on question.question_id=question_car.question_id
+		LEFT JOIN
+		series on question_car.series_id=series.series_id
+		LEFT JOIN
+		attach on
+		question.question_id=attach.target_id and
+		attach.deleted_at=0 and
+		attach.type=1
+		LEFT JOIN user on question.uid=user.uid
+		LEFT JOIN category
+		ca on
+		question.category_id=ca.category_id
+		LEFT JOIN category cat on
+		(ca.parent = cat.category_id or ca.category_id =
+		cat.category_id)
+		WHERE
+		question.deleted_at>0
+		<if test="uid!= null  ">
+			and question.uid= #{uid}
+		</if>
+		<if test="questionId!= null  ">
+			and question.question_id = #{questionId}
+		</if>
+		<if test="categoryId!= null  ">
+			and cat.category_id = #{categoryId}
+		</if>
+		<if test="hasAttach!= null  ">
+			and question.has_attach = #{hasAttach}
+		</if>
+		<if test="isTop!= null  ">
+			and question.is_top= #{isTop}
+		</if>
+		<if test="isGood!= null  ">
+			and question.is_good = #{isGood}
+		</if>
+		<if test="cityId!= null  ">
+			and city.id = #{cityId}
+		</if>
+		<if test="startTime!= null  ">
+			and question.created_at>= #{startTime}
+		</if>
+		<if test="endTime!= null  ">
+			and question.created_at &lt;= #{endTime}
+		</if>
+		<if test="brandId!= null  ">
+			and question_car.brand_id = #{brandId}
+		</if>
+		<if test="seriesId!= null  ">
+			and series.series_id= #{seriesId}
+		</if>
+		<if test="answerCount!= null  ">
+			and question.answer_count = #{answerCount}
+		</if>
+		<if test="key!= null  and key!=''">
+			and question.key = #{key}
+		</if>
+		<if test="keyWord!= null  and keyWord!=''">
+			and question.content LIKE concat('%',#{keyWord},'%')
+		</if>
+		<if test="userType != null">
+			and user.type = #{userType}
+		</if>
+		<if test="isOfficial != null">
+			and user.is_official = 1
+		</if>
+		<if test="source != null">
+			and question.source = #{source}
+		</if>
+		<if test="expert_name!= null  and expert_name!=''">
+			and user.expert_name = #{expert_name}
+		</if>
+		<choose>
+			<when test="deletedSelf != null and deletedSelf==1">
+				and question.deleted_self &gt;= #{deletedSelf}
+			</when>
+			<when test="deletedSelf != null and deletedSelf==0">
+				and question.deleted_self = #{deletedSelf}
+			</when>
+			<when test="deletedSelf != null and deletedSelf==-1">
+				and question.deleted_self = #{deletedSelf}
+			</when>
+		</choose>
+		order by question.created_at desc
+	</select>
+
+	<select id="selectCountByMapGroupHours" parameterType="java.util.Map"
+		resultType="INTEGER">
+		SELECT COUNT(question.question_id)
+		from tbl_qa_hours qah
+		LEFT JOIN
+		question on
+		qah.hour_id=FROM_UNIXTIME(question.created_at,'%H')
+		and
+		question.deleted_at=0
+		and question.`status` IN(1,2)
+		and
+		<choose>
+			<when test="beforeDay !=null and beforeDay>0">
+				FROM_UNIXTIME(question.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+				#{beforeDay} day)
+
+			</when>
+			<otherwise>
+				FROM_UNIXTIME(question.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+				1 day)
+			</otherwise>
+		</choose>
+		<if test="isGood !=null">
+			and question.is_good=#{isGood}
+		</if>
+		<if test="hasAttach !=null">
+			and question.has_attach=#{hasAttach}
+		</if>
+		GROUP BY qah.hour_id ORDER BY qah.hour_id
+	</select>
+	<select id="selectBuyCarQuestionCountGroupHours" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT hour_id as
+		created_at,category_id,COUNT(cq.question_id) as
+		answer_count
+		from
+		tbl_qa_hours qah LEFT JOIN
+		(SELECT
+		CASE
+		when
+		category.parent=1 OR
+		category.category_id=1 then 1
+		when
+		category.parent=3 Or
+		category.category_id=3 then 3
+		ELSE 0 END AS
+		category_id,question.created_at,question.question_id
+		from question
+		,category
+		where question.deleted_at=0
+		and question.status IN(1,2)
+		and
+		<choose>
+			<when test="beforeDay !=null and beforeDay>0">
+				FROM_UNIXTIME(question.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+				#{beforeDay} day)
+			</when>
+			<otherwise>
+				FROM_UNIXTIME(question.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+				1 day)
+			</otherwise>
+		</choose>
+		and
+		question.category_id=category.category_id ) cq
+		on
+		qah.hour_id=FROM_UNIXTIME(cq.created_at,'%H')
+		GROUP BY
+		qah.hour_id,cq.category_id
+		ORDER BY qah.hour_id
+	</select>
+	<select id="selectQuestionCountGroupHoursUserType"
+		parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT qah.hour_id as created_at,u.type
+		as
+		category_id,COUNT(question_id) as answer_count
+		from tbl_qa_hours qah
+		LEFT JOIN `user` u on u.type in(1,2)
+		LEFT JOIN question on
+		qah.hour_id=FROM_UNIXTIME(question.created_at,'%H')
+		and
+		u.uid=question.uid
+		and question.deleted_at=0
+		and question.status in(1,2)
+
+		<choose>
+			<when test="beforeDay !=null and beforeDay>0">
+				and
+				FROM_UNIXTIME(question.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+				#{beforeDay} day)
+			</when>
+			<otherwise>
+				and
+				FROM_UNIXTIME(question.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+				1 day)
+			</otherwise>
+		</choose>
+		GROUP BY
+		qah.hour_id,u.type
+		order by qah.hour_id,u.type
+	</select>
+	<select id="selectQuestionSpecifyCountGroupHoursUserType"
+		parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT qah.hour_id as created_at,u.type
+		as
+		category_id,COUNT(question.question_id) as answer_count
+		from
+		tbl_qa_hours qah
+		LEFT JOIN `user` u on u.type in(1,2)
+		LEFT JOIN
+		question_specify qs on qs.uid=u.uid
+		and qs.deleted_at=0
+		LEFT JOIN
+		question on
+		qah.hour_id=FROM_UNIXTIME(question.created_at,'%H')
+		and
+		qs.question_id=question.question_id
+		and question.deleted_at=0 and
+		question.status in(1,2)
+		<choose>
+			<when test="beforeDay !=null and beforeDay>0">
+				and
+				FROM_UNIXTIME(question.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+				#{beforeDay} day)
+			</when>
+			<otherwise>
+				and
+				FROM_UNIXTIME(question.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+				1 day)
+			</otherwise>
+		</choose>
+
+		GROUP BY
+		qah.hour_id,u.type
+		order by qah.hour_id,u.type
+	</select>
+	<select id="selectQuestionSourceGroupHoursUserType"
+		parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT qah.hour_id as created_at,tqt.type_value as source,
+		COUNT(question.question_id)
+		as answer_count
+		from tbl_qa_hours qah
+		LEFT
+		JOIN tbl_qa_type tqt
+		on tqt.type='source'
+		left
+		join question on
+		FROM_UNIXTIME(question.created_at,'%H')=qah.hour_id
+		and
+		tqt.type_value=question.source
+		and
+		<choose>
+			<when test="beforeDay !=null and beforeDay>0">
+				FROM_UNIXTIME(question.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+				#{beforeDay} day)
+			</when>
+			<otherwise>
+				FROM_UNIXTIME(question.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+				1 day)
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="status !=null and status==1">
+				and question.status in (1,2) and deleted_at =0
+			</when>
+		</choose>
+		GROUP BY
+		qah.hour_id, tqt.type_value ORDER BY qah.hour_id
+	</select>
+	<select id="selectQuestionSpecifyCountByTimeGroupDayUid"
+		parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT u.uid , COUNT(q.question_id) AS answer_count from `user` u
+		LEFT
+		JOIN question_specify qs on u.uid=qs.uid and qs.deleted_at=0
+		LEFT JOIN
+		question q on qs.question_id=q.question_id
+		and q.deleted_at=0 and
+		q.`status` in(1,2) and q.source !=999
+		<if test="beforeDay !=null">
+			and FROM_UNIXTIME(q.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+			#{beforeDay} day)
+		</if>
+		where u.type in (1,2)
+		GROUP BY u.uid order by u.uid
+	</select>
+	<select id="selectQuestionByAnswerGroupHours" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT tqh.hour_id as create_at,COUNT(tt.answer_id) as answer_count,
+		SUM(tt.min_time) as first_answered_at
+		from tbl_qa_hours tqh
+		LEFT JOIN
+		(SELECT a.answer_id,MIN(a.created_at) as created_at,
+		min(a.created_at)-q.created_at as min_time
+		from answer a,question q
+		where a.question_id=q.question_id
+		and a.deleted_at=0
+		<choose>
+			<when test="beforeDay !=null and beforeDay>0">
+				and FROM_UNIXTIME(q.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+				#{beforeDay} day)
+				and FROM_UNIXTIME(q.created_at,'%H')>=8
+				and FROM_UNIXTIME(a.created_at,'%Y-%m-%d %H-%i')
+				BETWEEN CONCAT(date_sub(curdate(),interval #{beforeDay} day),' 00-00')
+				and CONCAT(date_sub(curdate(),interval #{beforeDay}-1 day),' 00-30')
+			</when>
+			<otherwise>
+				and FROM_UNIXTIME(q.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+				1 day)
+				and FROM_UNIXTIME(q.created_at,'%H')>=8
+				and FROM_UNIXTIME(a.created_at,'%Y-%m-%d %H-%i')
+				BETWEEN CONCAT(date_sub(curdate(),interval 1 day),' 00-00') and
+				CONCAT(CURDATE(),' 00-30')
+			</otherwise>
+		</choose>
+		GROUP BY a.question_id
+		ORDER BY q.source ,a.answer_id) tt
+		on FROM_UNIXTIME(tt.created_at,'%H')=tqh.hour_id
+		GROUP BY tqh.hour_id
+	</select>
+
+	<select id="selectQuestionByAnswercount" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT * from question
+		where deleted_at=0 and `status` in (1,2)
+		and source !=999
+		and FROM_UNIXTIME(created_at,'%Y%m%d')
+		BETWEEN #{startTime} and #{endTime}
+		ORDER BY answer_count DESC LIMIT 20
+	</select>
+	<select id="exportQuestionListByMapParam" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT q.*,
+		cat.name as category_name
+		from question q,category ca,category cat
+		WHERE q.deleted_at=0
+		and q.`status` in(1,2)
+		<if test="categoryId!=null">
+			and cat.category_id=#{categoryId}
+		</if>
+		<if test="startTime!=null">
+			and q.created_at
+			BETWEEN #{startTime} and #{endTime}
+		</if>
+		<if test="keyWord!= null  and keyWord!=''">
+			and q.content LIKE concat('%',#{keyWord},'%')
+		</if>
+		and source !=999
+		and q.category_id=ca.category_id
+		and (ca.parent = cat.category_id or (cat.parent=0 and
+		q.category_id=cat.category_id))
+	</select>
+	<select id="selectDelQueGroupHoursSource" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT tqh.hour_id as create_at,tqt.type_value as source,
+		COUNT(q.question_id) as answer_count
+		from tbl_qa_hours tqh
+		LEFT JOIN tbl_qa_type tqt on tqt.type='source'
+		LEFT JOIN question q ON
+		<choose>
+			<when test="beforeDay !=null and beforeDay>0">
+				FROM_UNIXTIME(q.deleted_at,'%Y-%m-%d')=date_sub(curdate(),interval
+				#{beforeDay} day)
+				and FROM_UNIXTIME(q.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+				#{beforeDay} day)
+			</when>
+			<otherwise>
+				FROM_UNIXTIME(q.deleted_at,'%Y-%m-%d')=date_sub(curdate(),interval 1
+				day)
+				and FROM_UNIXTIME(q.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+				1 day)
+			</otherwise>
+		</choose>
+		and tqt.type_value=q.source and
+		tqh.hour_id=FROM_UNIXTIME(q.created_at,'%H')
+		GROUP BY tqh.hour_id,tqt.type_value ORDER BY tqh.hour_id
+	</select>
+	<select id="selectAnswerQueGroupHoursSource" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT tqt.type_value as source, tqh.hour_id as created_at,
+		COUNT(tt.question_id) as answer_count
+		from tbl_qa_hours tqh
+		LEFT JOIN tbl_qa_type tqt on tqt.type='source'
+		LEFT JOIN
+		(SELECT q.question_id,q.source,a.answer_id,q.created_at
+		from answer a,question q
+		where a.question_id=q.question_id
+		and a.deleted_at=0 and q.deleted_at=0
+		<choose>
+			<when test="beforeDay !=null and beforeDay>0">
+				and FROM_UNIXTIME(q.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+				#{beforeDay} day)
+				and FROM_UNIXTIME(a.created_at,'%Y-%m-%d %H')
+				BETWEEN CONCAT(date_sub(curdate(),interval #{beforeDay} day),' 00') and
+				CONCAT(date_sub(curdate(),interval #{beforeDay}-1 day),' 01')
+			</when>
+			<otherwise>
+				and FROM_UNIXTIME(q.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+				1 day)
+				and FROM_UNIXTIME(a.created_at,'%Y-%m-%d %H')
+				BETWEEN CONCAT(date_sub(curdate(),interval 1 day),' 00') and
+				CONCAT(CURDATE(),' 01')
+			</otherwise>
+		</choose>
+
+		GROUP BY a.question_id
+		ORDER BY a.question_id
+		) tt on tqt.type_value=tt.source
+		and tqh.hour_id=FROM_UNIXTIME(tt.created_at,'%H')
+		GROUP BY tqh.hour_id,tqt.type_value
+	</select>
+	<select id="exportRubbishQuestion" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT * from question
+		where deleted_at>0
+		<choose>
+			<when test="startTime!=null and startTime!='' ">
+				and created_at
+				BETWEEN #{startTime} and #{endTime}
+			</when>
+			<otherwise>
+				and FROM_UNIXTIME(created_at,'%Y-%m-%d')=CURDATE()
+			</otherwise>
+		</choose>
+		<if test="source!=null">
+			and source=#{source}
+		</if>
+		<if test="keyWord!=null">
+			and keyWord like '%#{source}%'
+		</if>
+	</select>
+
+	<select id="selectQuestionId" parameterType="java.lang.Long"
+		resultType="java.lang.Long">
+		select question_id from question
+		where uid=${_parameter} and deleted_at=0
+		order by created_at desc LIMIT 50
+	</select>
+	<select id="selectHighEnergyQuestion" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT q.*
+		FROM answer a, question q,attach att,`user` u
+		where a.deleted_at=0
+		and CHAR_LENGTH(TRIM( a.content))>=200
+		and att.type=2
+		and att.file_type=0
+		and a.answer_id=att.target_id
+		and a.question_id=q.question_id
+		and u.uid=a.uid
+		and u.type=2
+		and att.deleted_at=0
+		and FROM_UNIXTIME(a.created_at,'%Y%m%d')>='20170701'
+		<if
+			test="startTime!=null and startTime!='' and endTime!=null and endTime!='' ">
+			and FROM_UNIXTIME(a.created_at,'%Y%m%d')
+			BETWEEN #{startTime} and #{endTime}
+		</if>
+		<if test="uid!=null">
+			and a.uid=#{uid}
+		</if>
+		GROUP BY q.question_id
+		ORDER BY a.created_at DESC
+	</select>
+
+	<update id="updateAnswer" parameterType="java.lang.Long">
+		UPDATE question SET
+		answer_count=(SELECT COUNT(answer_id) from answer
+		where question_id=${_parameter} and deleted_at=0)
+		,
+		answer_users_count=(SELECT COUNT(DISTINCT(uid)) from answer
+		where question_id=${_parameter} and deleted_at=0)
+		,
+		first_answered_at=(SELECT MIN(created_at) from answer
+		where question_id=${_parameter} and deleted_at=0)
+		
+		where question_id=${_parameter}
+
+	</update>
+	
+	<select id="selectGood" resultType="java.lang.Long">
+	 SELECT question_id from question where is_good=1
+	</select>
+</mapper>

@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/xyask_admin/!svn/ver/358/trunk/src/main/java/com/xyauto/qa/mapper
+END
+SeriesMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/xyask_admin/!svn/ver/274/trunk/src/main/java/com/xyauto/qa/mapper/SeriesMapper.java
+END
+AdminLogsMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/xyask_admin/!svn/ver/242/trunk/src/main/java/com/xyauto/qa/mapper/AdminLogsMapper.java
+END
+UserMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/xyask_admin/!svn/ver/329/trunk/src/main/java/com/xyauto/qa/mapper/UserMapper.java
+END
+SpiderQuestionMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/xyask_admin/!svn/ver/358/trunk/src/main/java/com/xyauto/qa/mapper/SpiderQuestionMapper.java
+END
+AnswerMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/xyask_admin/!svn/ver/342/trunk/src/main/java/com/xyauto/qa/mapper/AnswerMapper.java
+END
+CommentMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/xyask_admin/!svn/ver/342/trunk/src/main/java/com/xyauto/qa/mapper/CommentMapper.java
+END
+MessageMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/xyask_admin/!svn/ver/205/trunk/src/main/java/com/xyauto/qa/mapper/MessageMapper.java
+END
+UserCarMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/xyask_admin/!svn/ver/274/trunk/src/main/java/com/xyauto/qa/mapper/UserCarMapper.java
+END
+UserApplyMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/xyask_admin/!svn/ver/335/trunk/src/main/java/com/xyauto/qa/mapper/UserApplyMapper.java
+END
+DictionaryMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/xyask_admin/!svn/ver/179/trunk/src/main/java/com/xyauto/qa/mapper/DictionaryMapper.java
+END
+QuestionMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/xyask_admin/!svn/ver/290/trunk/src/main/java/com/xyauto/qa/mapper/QuestionMapper.java
+END
+UserCityMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/xyask_admin/!svn/ver/244/trunk/src/main/java/com/xyauto/qa/mapper/UserCityMapper.java
+END
+CityMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/xyask_admin/!svn/ver/243/trunk/src/main/java/com/xyauto/qa/mapper/CityMapper.java
+END

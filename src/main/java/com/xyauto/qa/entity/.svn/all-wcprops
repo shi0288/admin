@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/xyask_admin/!svn/ver/358/trunk/src/main/java/com/xyauto/qa/entity
+END
+Answer.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/xyask_admin/!svn/ver/342/trunk/src/main/java/com/xyauto/qa/entity/Answer.java
+END
+Comment.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/xyask_admin/!svn/ver/342/trunk/src/main/java/com/xyauto/qa/entity/Comment.java
+END
+Message.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/xyask_admin/!svn/ver/205/trunk/src/main/java/com/xyauto/qa/entity/Message.java
+END
+UserApply.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/xyask_admin/!svn/ver/335/trunk/src/main/java/com/xyauto/qa/entity/UserApply.java
+END
+Dictionary.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/xyask_admin/!svn/ver/179/trunk/src/main/java/com/xyauto/qa/entity/Dictionary.java
+END
+UserCity.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/xyask_admin/!svn/ver/244/trunk/src/main/java/com/xyauto/qa/entity/UserCity.java
+END
+Question.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/xyask_admin/!svn/ver/335/trunk/src/main/java/com/xyauto/qa/entity/Question.java
+END
+User.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/xyask_admin/!svn/ver/318/trunk/src/main/java/com/xyauto/qa/entity/User.java
+END
+SpiderQuestion.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/xyask_admin/!svn/ver/358/trunk/src/main/java/com/xyauto/qa/entity/SpiderQuestion.java
+END

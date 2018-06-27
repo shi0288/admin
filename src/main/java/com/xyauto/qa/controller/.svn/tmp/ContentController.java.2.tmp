@@ -1,0 +1,427 @@
+package com.xyauto.qa.controller;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageInfo;
+import com.xyauto.qa.cons.*;
+import com.xyauto.qa.core.annotation.QaLog;
+import com.xyauto.qa.entity.*;
+import com.xyauto.qa.mapper.AttachMapper;
+import com.xyauto.qa.mapper.CityMapper;
+import com.xyauto.qa.service.*;
+import com.xyauto.qa.service.cloud.QaUserService;
+import com.xyauto.qa.service.cloud.RUserService;
+import com.xyauto.qa.util.DateUtils;
+import com.xyauto.qa.util.QaResult;
+import com.xyauto.utils.cache.RedisKeyUtil;
+import com.xyauto.utils.cache.service.ICacheService;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Created by shiqm on 2017/3/23.
+ */
+@Controller
+@RequestMapping("user/question")
+public class ContentController extends AjaxBaseController {
+
+
+    @Autowired
+    private QuestionService questionService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private BlocksService blocksService;
+
+    @Autowired
+    private RUserService rUserService;
+
+    @Autowired
+    private CityMapper cityMapper;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private BrandService brandService;
+
+    @Autowired
+    private QaUserService qaUserService;
+    @Autowired
+    private IAnswerService answerService;
+    @Autowired
+    private AttachMapper attachMapper;
+    @Autowired
+    private ICacheService cacheService;
+
+    @RequestMapping("contentList")
+    public void contentList(ModelMap modelMap, String startDate, String endDate, Integer userType, Question question, String keyWord, String nickName, Brand brand, Series series) {
+
+        if (StringUtils.isNotBlank(nickName)) {
+            String userId = rUserService.getUserIdByNickName(nickName);
+            question.setUid(Long.parseLong(userId));
+            modelMap.put("nickName", nickName);
+        }
+        if (StringUtils.isNotBlank(keyWord)) {
+            modelMap.put("keyWord", keyWord);
+        }
+        if (StringUtils.isNotBlank(startDate)) {
+            Date date = DateUtils.strToDate(startDate);
+            if (date != null) {
+                question.setCreatedAt((int) (date.getTime() / 1000));
+                modelMap.put("startDate", startDate);
+            }
+        }
+        if (StringUtils.isNotBlank(endDate)) {
+            Date date = DateUtils.strToDate(endDate);
+            if (date != null) {
+                question.setUpdatedAt((int) (date.getTime() / 1000));
+                modelMap.put("endDate", endDate);
+            }
+        }
+        modelMap.put("userType", userType);
+        PageInfo pageInfo = questionService.getQuestionListByMapParam(question, keyWord, nickName, userType, brand, series, CommonCons.Quesiotn_Flag.NORMAL_QUESTION);
+        modelMap.put("pager", pageInfo);
+        modelMap.put("question", question);
+        Category category = new Category();
+        category.setParent(0);
+        //获取问题分类信息
+        modelMap.put("categoryList", categoryService.get(category));
+        //获取品牌信息
+        modelMap.put("brandList", brandService.selectBrandOrderByName());
+        //获取市信息
+        City city = new City();
+        city.setParent(0);
+        modelMap.put("provinceList", cityMapper.select(city));
+
+        //add by shim 封装所有的来源信息
+        if (question.getSource() != null && question.getSource() != 0) {
+            modelMap.put("source", question.getSource());
+        }
+        modelMap.put("sourceMap", ConvertCons.ResourceCover.getMap());
+    }
+
+    @RequestMapping("rubbishList")
+    public void rubbishList(ModelMap modelMap, Integer answerType, String startDate, String endDate,
+                            Question question, Answer answer, String keyWord, String nickName) {
+
+        if (StringUtils.isNotBlank(nickName)) {
+            String userId = rUserService.getUserIdByNickName(nickName);
+            question.setUid(Long.parseLong(userId));
+        }
+        if (StringUtils.isNotBlank(keyWord)) {
+            modelMap.put("keyWord", keyWord);
+        }
+        if (StringUtils.isNotBlank(startDate)) {
+            Date date = DateUtils.strToDate(startDate);
+            if (date != null) {
+                question.setCreatedAt((int) (date.getTime() / 1000));
+                modelMap.put("startDate", startDate);
+            }
+        }
+        if (StringUtils.isNotBlank(endDate)) {
+            Date date = DateUtils.strToDate(endDate);
+            if (date != null) {
+                question.setUpdatedAt((int) (date.getTime() / 1000));
+                modelMap.put("endDate", endDate);
+            }
+        }
+        PageInfo pageInfo;
+        if (answerType != null && answerType == 2) {
+            pageInfo = answerService.getAnswerList(answer, null, null, keyWord, CommonCons.Quesiotn_Flag.DELETE_QUESTION);
+            modelMap.put("answeQuestion", answer);
+            modelMap.put("answerType", 2);
+            modelMap.put("question", null);
+        } else {
+            pageInfo = questionService.getQuestionListByMapParam(question, keyWord, nickName, null,
+                    null, null, CommonCons.Quesiotn_Flag.DELETE_QUESTION);
+            modelMap.put("answeQuestion", question);
+            modelMap.put("answerType", 1);
+            Category category = new Category();
+            category.setParent(0);
+            //获取问题分类信息
+            modelMap.put("categoryList", categoryService.get(category));
+        }
+        modelMap.put("pager", pageInfo);
+        //获取市信息
+        City city = new City();
+        city.setParent(0);
+        modelMap.put("provinceList", cityMapper.select(city));
+        modelMap.put("sourceMap", ConvertCons.ResourceCover.getMap());
+    }
+
+    @RequestMapping("questionAdd")
+    public void questionAdd(ModelMap modelMap) {
+        JSONArray jsonArray = blocksService.getBlockByName(CommonCons.Blocks_Flag.USER_OPERATE_BUSINESS);
+        JSONArray businessUserList = null;
+        if (jsonArray != null) {
+            String temp = rUserService.getUserList(StringUtils.join(jsonArray, ","));
+            businessUserList = JSON.parseArray(temp);
+        }
+        modelMap.put("businessUserList", businessUserList);
+        City city = new City();
+        city.setParent(0);
+        modelMap.put("provinceList", cityMapper.select(city));
+        Category category = new Category();
+        category.setParent(0);
+        modelMap.put("categoryList", categoryService.get(category));
+        modelMap.put("brandList", brandService.selectBrandOrderByName());
+    }
+
+    @QaLog(action = LogAction.QUESTION_ADD_QUESTION, cmd = "createQuestion")
+    @RequestMapping(value = "createQuestion", method = RequestMethod.POST)
+    @ResponseBody
+    public QaResult createQuestion(String uid, String category_id, String content, String[] seriesIds, String special_id, 
+    		String city_id, String attachs, Integer is_good,String releaseTime) {
+
+        if (StringUtils.isEmpty(uid)) {
+            return new QaResult(ErrorCode.OVER, "发布用户不能为空");
+        }
+        if (StringUtils.isEmpty(content)) {
+            return new QaResult(ErrorCode.OVER, "内容不能为空");
+        }
+        if (StringUtils.isEmpty(category_id)) {
+            return new QaResult(ErrorCode.OVER, "问题类型不能为空");
+        }
+
+        String cars = null;
+        if (seriesIds != null && seriesIds.length > 0) {
+            cars = StringUtils.join(seriesIds, ",");
+        }
+        Date date=new Date();
+        String res = qaUserService.createQuestionNoPic(category_id, content, uid, cars, null, city_id, attachs, is_good);
+        JSONObject jsonObject = JSON.parseObject(res);
+        
+        if (jsonObject.getIntValue("code") == 10000) {
+        	Date releaseDate=DateUtils.strToDate(releaseTime);
+        	if (releaseDate.after(date)) {        		
+            	//创建完成后立刻更新状态---待发布
+            	JSONObject dataObject=jsonObject.getJSONObject("data");
+            	String questionId=dataObject.getString("question_id");
+            	Question question=questionService.get(Long.parseLong(questionId));
+            	question.setStatus(CommonCons.Quesiotn_Flag.RELEASE_QUESTION);//待发布
+            	questionService.update(question);
+            	//redis中设置定时发布的问题
+            	String key=RedisKeyUtil.getKey(RedisKeyUtil.Model.question,"release_question");
+            	Map<String, Object> map=cacheService.getMap(key);
+            	map.put(questionId, releaseDate);
+            	cacheService.set(key, map);
+			}        	
+            return new QaResult();
+        } else {
+            return new QaResult(ErrorCode.OVER, jsonObject.getString("msg"));
+        }
+    }
+
+    @RequestMapping(value = "frozenUserAndExpert", method = RequestMethod.POST)
+    @ResponseBody
+    public QaResult frozenUserAndExpert(User user, Boolean is) {
+        userService.frozenUserAndExpert(user, is);
+        return new QaResult();
+    }
+
+    @QaLog(action = LogAction.QUESTION_SET_GOOD, cmd = "setGood")
+    @RequestMapping(value = "setGood", method = RequestMethod.POST)
+    @ResponseBody
+    public QaResult setGood(Question question, Boolean is) {
+        if (question.getGoodSort() == null) {
+            question.setGoodSort(0);
+        }
+        questionService.updateGood(question, is);
+        return new QaResult();
+    }
+
+    @QaLog(action = LogAction.QUESTION_SET_TOP, cmd = "setTop")
+    @RequestMapping(value = "setTop", method = RequestMethod.POST)
+    @ResponseBody
+    public QaResult setTop(Question question, Boolean is) {
+        if (question.getTopSort() == null) {
+            question.setTopSort(0);
+        }
+        questionService.updateTop(question, is);
+        return new QaResult();
+    }
+
+    @RequestMapping(value = "deleteQuestion", method = RequestMethod.POST)
+    @ResponseBody
+    public QaResult deleteQuestion(Question question) {
+        questionService.deleteQuestionById(question.getQuestionId());
+        return new QaResult();
+    }
+
+    @RequestMapping(value = "recoveryQuestion", method = RequestMethod.POST)
+    @ResponseBody
+    public QaResult recoveryQuestion(Question question) {
+        questionService.recoveryQuestionById(question.getQuestionId());
+        return new QaResult();
+    }
+
+    @RequestMapping("toUpdateQuestion")
+    public void toUpdateQuestion(Long questionId, ModelMap modelMap) {
+        Question question = questionService.getQuestionDesc(questionId);
+        modelMap.put("question", question);
+        JSONArray jsonArray = blocksService.getBlockByName(CommonCons.Blocks_Flag.USER_OPERATE_BUSINESS);
+        JSONArray businessUserList = null;
+        if (jsonArray != null) {
+            String temp = rUserService.getUserList(StringUtils.join(jsonArray, ","));
+            businessUserList = JSON.parseArray(temp);
+        }
+        modelMap.put("businessUserList", businessUserList);
+        if (question.getAttaches() != null) {
+            List temp = question.getAttaches();
+            List<String> target = new ArrayList<String>();
+            for (int i = 0; i < temp.size(); i++) {
+                Attach attach = (Attach) temp.get(i);
+                if (attach.getFileType() == 0) {
+                    target.add(attach.getFile());
+                }
+            }
+            modelMap.put("attachs", StringUtils.join(target, ","));
+        }
+        City city = new City();
+        city.setParent(0);
+        modelMap.put("provinceList", cityMapper.select(city));
+        if (question.getCity() != null) {
+            city.setParent(question.getCity().getParent());
+            modelMap.put("curCitys", cityMapper.select(city));
+        }
+        Category category = new Category();
+        category.setParent(0);
+        modelMap.put("categoryList", categoryService.get(category));
+        modelMap.put("brandList", brandService.selectBrandOrderByName());
+    }
+
+    @RequestMapping(value = "updateQuestion", method = RequestMethod.POST)
+    @ResponseBody
+    public QaResult updateQuestion(Question que, String[] attachs, String[] seriesIds) {
+        questionService.updateQuestion(que, attachs, seriesIds);
+        return new QaResult();
+    }
+
+
+    @RequestMapping("verifyList")
+    public void verifyList(ModelMap modelMap, Integer answerType, String startDate, String endDate,
+                           Question question, Answer answer, String keyWord, String nickName) {
+        if (StringUtils.isNotBlank(nickName)) {
+            String userId = rUserService.getUserIdByNickName(nickName);
+            question.setUid(Long.parseLong(userId));
+        }
+        if (StringUtils.isNotBlank(keyWord)) {
+            modelMap.put("keyWord", keyWord);
+        }
+        if (StringUtils.isNotBlank(startDate)) {
+            Date date = DateUtils.strToDate(startDate);
+            if (date != null) {
+                question.setCreatedAt((int) (date.getTime() / 1000));
+                modelMap.put("startDate", startDate);
+            }
+        }
+        if (StringUtils.isNotBlank(endDate)) {
+            Date date = DateUtils.strToDate(endDate);
+            if (date != null) {
+                question.setUpdatedAt((int) (date.getTime() / 1000));
+                modelMap.put("endDate", endDate);
+            }
+        }
+        if (question.getStatus() == null) {
+            question.setStatus(-1);
+        }
+        PageInfo pageInfo;
+        if (answerType != null && answerType == 2) {
+            pageInfo = answerService.getAnswerList(answer, null, null, keyWord, CommonCons.Quesiotn_Flag.REVIEW_QUESTION);
+            modelMap.put("answeQuestion", answer);
+            modelMap.put("answerType", 2);
+            modelMap.put("question", null);
+        } else {
+            pageInfo = questionService.getQuestionListByMapParam(question, keyWord, nickName, null,
+                    null, null, CommonCons.Quesiotn_Flag.REVIEW_QUESTION);
+            modelMap.put("answerType", 1);
+            modelMap.put("answeQuestion", question);
+            Category category = new Category();
+            category.setParent(0);
+            //获取问题分类信息
+            modelMap.put("categoryList", categoryService.get(category));
+        }
+        modelMap.put("pager", pageInfo);
+        //获取市信息
+        City city = new City();
+        city.setParent(0);
+        modelMap.put("provinceList", cityMapper.select(city));
+    }
+
+    //审核问题
+    @RequestMapping(value = "verifyQuestion", method = RequestMethod.POST)
+    @ResponseBody
+    public QaResult verifyQuestion(Question question) {
+        questionService.verifyQuestion(question.getQuestionId());
+        return new QaResult();
+    }
+
+    @RequestMapping("topList")
+    public void topList(ModelMap modelMap, Long questionId) {
+        //查询需要置顶的帖子
+        Question question = questionService.get(questionId);
+        if (question == null) {
+            logger.info("问题id为空");
+            return;
+        }
+        //查询已经置顶的帖子
+        Question questiontop = new Question();
+        questiontop.setIsTop(1);
+        List<Question> topList = questionService.get(questiontop);
+        List<Question> questionList = new ArrayList<Question>();
+        questionList.add(question);
+        questionList.addAll(topList);
+        modelMap.put("questionList", questionList);
+    }
+
+    @RequestMapping(value = "selectQuestionKey", method = RequestMethod.POST)
+    @ResponseBody
+    public QaResult selectQuestionKey(Long questionId) {
+        Question question = questionService.get(questionId);
+        return new QaResult(question.getKey());
+    }
+    
+    
+    @RequestMapping("exportQuestion")
+    public void exportQuestion(HttpServletResponse response,String startDate, 
+    		String endDate,String keyWord,Integer categoryId  ) {
+    	Map<String, Object> map=new HashMap<String, Object>();
+        if (StringUtils.isNotBlank(keyWord)) {
+        	map.put("keyWord", keyWord);
+        }
+        if (categoryId!=null) {
+        	map.put("categoryId", categoryId);
+		}
+        if (StringUtils.isNotBlank(startDate)&&StringUtils.isNotBlank(endDate)) {
+            Date date = DateUtils.strToDate(startDate);
+            map.put("startTime", (int)(date.getTime() / 1000));
+            Date date1 = DateUtils.strToDate(endDate);
+            map.put("endTime", (int)(date1.getTime() / 1000));
+        }else{
+        	return;
+        }
+        questionService.exportQuestionListByMapParam(response, map);
+    }
+
+    @ModelAttribute("urlObj")
+    public JSONObject getUrlObj() {
+        return super.getUrlObj();
+    }
+
+}

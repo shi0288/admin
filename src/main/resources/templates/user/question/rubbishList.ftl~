@@ -1,0 +1,170 @@
+<#include "/user/boot_top.ftl"/>
+<div class="panel-body">
+    <ol class="breadcrumb">
+        <li><a href="##">内容管理</a></li>
+        <li class="active">问答回收站</li>
+    </ol>
+    <div class="well">
+
+<form class="form-inline">
+  <div class="form-group">
+    <label for="exampleInputName2">Name</label>
+    <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputEmail2">Email</label>
+    <input type="email" class="form-control" id="exampleInputEmail2" placeholder="jane.doe@example.com">
+  </div>
+  <button type="submit" class="btn btn-default">Send invitation</button>
+</form>
+
+        <form class="table-filter form-inline" action="${base}/user/question/rubbishList" method="post">
+            <div class="form-group">
+                <label for="questionId">问答ID</label>
+                <input type="text" value="${(answeQuestion.questionId)!''}" name="questionId" id="questionId"
+                       placeholder="问答ID"/>
+            </div>
+            <div class="form-group">
+                <label for="uid">用户ID</label>
+                <input type="text" value="${(answeQuestion.uid)!''}" name="uid" id="uid" placeholder="用户ID"/>
+            </div>
+            <div class="form-group">
+                <label for="nickName">用户名</label>
+                <input type="text" value="${nickName!''}" name="nickName" id="nickName" placeholder="用户名"/>
+            </div>
+            <div class="form-group">
+                <label for="keyWord">关键词</label>
+                <input type="text" value="${(keyWord)!''}" id="keyWord" name="keyWord" placeholder="关键词"/>
+            </div>
+
+
+        <#--<div class="row">-->
+        <#--<div class="col-md-3">-->
+        <#--<select name="answerType" class="form-control">-->
+        <#--<option-->
+        <#--<#if answerType==1>-->
+        <#--selected = "selected"-->
+        <#--</#if>-->
+        <#--value="1">问题</option>-->
+        <#--<option-->
+        <#--<#if answerType==2>-->
+        <#--selected = "selected"-->
+        <#--</#if>-->
+        <#--value="2">回答</option>-->
+        <#--</select>-->
+        <#--</div>-->
+        <#--<div class="col-md-3">-->
+        <#--<select name="categoryId" class="form-control">-->
+        <#--<option value="">问题分类</option>-->
+        <#--<option value="0">其他</option>-->
+        <#--<#if categoryList??>-->
+        <#--<#list categoryList as category>-->
+        <#--<option value="${category.categoryId}"-->
+        <#--<#if answeQuestion.categoryId==category.categoryId>-->
+        <#--selected = "selected"-->
+        <#--</#if>-->
+        <#-->${category.name}</option>-->
+        <#--</#list>-->
+        <#--</#if>-->
+        <#--</select>-->
+        <#--</div>-->
+        <#---->
+        <#--<div class="col-md-3">-->
+        <#--<input value="${startDate!''}" id="startDate" name="startDate" type="text"-->
+        <#--class="form-control Wdate" style="height: 34px;"-->
+        <#--onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',realDateFmt:'yyyy-MM-dd HH:mm:ss'})"-->
+        <#--placeholder="开始时间>="/>-->
+        <#--</div>-->
+        <#--<div class="col-md-3">-->
+        <#--<input value="${endDate!''}" id="endDate" name="endDate" type="text"-->
+        <#--class="form-control Wdate" style="height: 34px;"-->
+        <#--onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',realDateFmt:'yyyy-MM-dd HH:mm:ss'})"-->
+        <#--placeholder="结束时间<="/>-->
+        <#--</div>-->
+        <#--</div>-->
+
+        <#--<div class="row">-->
+        <#--<div class="col-md-3">-->
+        <#--<select class="form-control province_sel">-->
+        <#--<option value="">发布省份</option>-->
+        <#--<#if (provinceList)??>-->
+        <#--<#list  provinceList as province>-->
+        <#--<option value="${(province.id)!''}">${(province.name)!''}</option>-->
+        <#--</#list>-->
+        <#--</#if>-->
+        <#--</select>-->
+        <#--</div>-->
+        <#--<div class="col-md-3">-->
+        <#--<select name="cityId" class="form-control city_sel" >-->
+        <#--<option value="">发布城市</option>-->
+        <#--</select>-->
+        <#--</div>-->
+        <#--<div class="col-md-3">-->
+        <#--<select name="source" id="source" class="form-control">-->
+        <#--<option value="">来源（全部）</option>-->
+        <#--<#if (sourceMap)??>-->
+        <#--<#list sourceMap.keySet() as key>-->
+        <#--<option <#if answeQuestion.source?? && answeQuestion.source==key > selected="selected"</#if> value="${key}">${sourceMap.get(key)}</option>-->
+        <#--</#list>-->
+        <#--</#if>-->
+        <#--</select>-->
+        <#--</div>-->
+        <#--<div class="col-md-3">-->
+        <#--<select name="deletedSelf" id="deletedSelf" class="form-control">-->
+        <#--<option value="">是否自己删除</option>-->
+        <#--<option-->
+        <#--<#if answeQuestion.deletedSelf==1>-->
+        <#--selected = "selected"-->
+        <#--</#if>-->
+        <#--value="1">是</option>-->
+        <#--<option-->
+        <#--<#if answeQuestion.deletedSelf==0>-->
+        <#--selected = "selected"-->
+        <#--</#if>-->
+        <#--value="0">否</option>-->
+        <#--</select>-->
+        <#--</div>-->
+        <#--</div>-->
+
+            <div class="row" style="padding-top: 10px;">
+                <div class="col-md-1">
+                    <button type="submit" class="btn btn-primary"> 筛选</button>
+                </div>
+                <div class="col-md-1 hidden-xs">
+                    <button type="button" onclick="exportRubbish()" class="btn btn-primary"> 导出全部</button>
+                </div>
+            </div>
+        </form>
+    </div>
+<#if  (pager.list)??>
+    <#import "/user/boot_pager.ftl" as p>
+    <#assign parameterMap = {"questionId":(answeQuestion.questionId)!,
+    "nickName":(nickName),"uid":(answeQuestion.uid)!,"answerType":(answerType)!,
+    "categoryId":(answeQuestion.categoryId)!,
+    "keyWord":(keyWord)!,"startDate":(startDate)!,"endDate":(endDate)!,"source":(answeQuestion.source)!
+    }
+    />
+    <@p.pager pager = pager baseUrl = "${base}/user/question/rubbishList" parameterMap = parameterMap/>
+</#if>
+
+
+<#if answerType==1>
+    <#include  "/user/question/rubbishCom.ftl" />
+<#else>
+    <#assign curName="rubbishList" />
+    <#include  "/user/answer/answerCom.ftl"  />
+</#if>
+
+
+
+<#if  (pager.list)??>
+    <@p.pager pager = pager baseUrl = "${base}/user/question/rubbishList" parameterMap = parameterMap/>
+</#if>
+
+</div>
+<#include "/user/boot_bottom.ftl"/>
+<script type="text/javascript" rel="stylesheet" src="${jsPath}/question.js"></script>
+<script type="text/javascript" rel="stylesheet" src="${jsPath}/answer.js"></script>
+<script src="${jsPath}/date/WdatePicker.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+package com.xyauto.qa.entity.vo;
+
+public class SpiderQuestionVo {
+	public String content;
+	public String category_name;
+	public Integer category_id;
+	public String sub_category_name;
+	public Integer sub_category_id;
+	public String brand_name;
+	public Integer brand_id;
+	public String series_name;
+	public Integer series_id;
+	
+	
+
+}

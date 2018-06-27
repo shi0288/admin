@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/xyask_admin/!svn/ver/344/trunk/src/main/java/com/xyauto/qa/service/cloud
+END
+QaUserService.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/xyask_admin/!svn/ver/344/trunk/src/main/java/com/xyauto/qa/service/cloud/QaUserService.java
+END
+RUserService.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/xyask_admin/!svn/ver/260/trunk/src/main/java/com/xyauto/qa/service/cloud/RUserService.java
+END
+TaskUserService.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/xyask_admin/!svn/ver/261/trunk/src/main/java/com/xyauto/qa/service/cloud/TaskUserService.java
+END

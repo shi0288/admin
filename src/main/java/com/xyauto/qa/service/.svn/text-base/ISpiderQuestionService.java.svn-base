@@ -1,0 +1,10 @@
+package com.xyauto.qa.service;
+
+import com.github.pagehelper.Page;
+import com.xyauto.qa.entity.SpiderQuestion;
+import com.xyauto.qa.entity.vo.SpiderQuestionVo;
+
+public interface ISpiderQuestionService{
+	Page<SpiderQuestionVo> selectByPage(SpiderQuestion spiderQuestion);
+
+}

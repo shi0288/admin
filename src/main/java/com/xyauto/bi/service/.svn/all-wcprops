@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/xyask_admin/!svn/ver/309/trunk/src/main/java/com/xyauto/bi/service
+END
+IQuestionBIService.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/xyask_admin/!svn/ver/309/trunk/src/main/java/com/xyauto/bi/service/IQuestionBIService.java
+END
+IQuestionBiExcleService.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/xyask_admin/!svn/ver/184/trunk/src/main/java/com/xyauto/bi/service/IQuestionBiExcleService.java
+END

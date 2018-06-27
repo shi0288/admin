@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/xyask_admin/!svn/ver/359/trunk/src/main/resources/templates/user
+END
+boot_sub.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/xyask_admin/!svn/ver/195/trunk/src/main/resources/templates/user/boot_sub.ftl
+END
+boot_left.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/xyask_admin/!svn/ver/203/trunk/src/main/resources/templates/user/boot_left.ftl
+END
+boot_top.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/xyask_admin/!svn/ver/287/trunk/src/main/resources/templates/user/boot_top.ftl
+END
+adminLog.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/xyask_admin/!svn/ver/354/trunk/src/main/resources/templates/user/adminLog.ftl
+END

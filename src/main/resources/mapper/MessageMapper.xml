@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xyauto.qa.mapper.MessageMapper">
+    <resultMap id="base_result" type="com.xyauto.qa.entity.Message">
+        <id property="id" column="id"/>
+        <result property="uid" column="uid"/>
+        <result property="content" column="content"/>
+        <result property="created_at" column="created_at"/>
+        <result property="deleted_at" column="deleted_at"/>
+        <result property="type" column="type"/>
+        <result property="unsealed" column="unsealed"/>
+    </resultMap>
+    
+    <insert id="add">
+        insert into message
+        set uid = #{uid}, content = #{content}, created_at = unix_timestamp(now()), type = #{type}
+    </insert>
+    <select id="selectGroupUid" resultMap="base_result">
+      SELECT DISTINCT(m.uid) as uid from message m,`user` u
+      where m.type=#{type}
+      and m.uid=u.uid
+      and u.type=2
+      and FROM_UNIXTIME(m.created_at,'%Y%m')=#{time}
+      <if test="uid!=null">
+      and m.uid=#{uid}
+      </if>
+      
+    </select>
+        
+</mapper>

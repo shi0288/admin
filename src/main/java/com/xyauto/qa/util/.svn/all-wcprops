@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/xyask_admin/!svn/ver/353/trunk/src/main/java/com/xyauto/qa/util
+END
+ImageHelper.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/xyask_admin/!svn/ver/316/trunk/src/main/java/com/xyauto/qa/util/ImageHelper.java
+END
+FeignClientUtil.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/xyask_admin/!svn/ver/237/trunk/src/main/java/com/xyauto/qa/util/FeignClientUtil.java
+END
+QuestionUtil.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/xyask_admin/!svn/ver/330/trunk/src/main/java/com/xyauto/qa/util/QuestionUtil.java
+END
+QaFeignClientUtil.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/xyask_admin/!svn/ver/237/trunk/src/main/java/com/xyauto/qa/util/QaFeignClientUtil.java
+END
+UploadCons.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/xyask_admin/!svn/ver/315/trunk/src/main/java/com/xyauto/qa/util/UploadCons.java
+END
+TemplateUtils.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/xyask_admin/!svn/ver/353/trunk/src/main/java/com/xyauto/qa/util/TemplateUtils.java
+END
+DateUtils.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/xyask_admin/!svn/ver/204/trunk/src/main/java/com/xyauto/qa/util/DateUtils.java
+END

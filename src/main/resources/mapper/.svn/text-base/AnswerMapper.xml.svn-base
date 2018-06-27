@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyauto.qa.mapper.AnswerMapper">
+	<resultMap id="BaseResultMap" type="com.xyauto.qa.entity.Answer">
+		<!-- WARNING - @mbg.generated -->
+		<id column="answer_id" jdbcType="BIGINT" property="answerId" />
+		<result column="question_id" jdbcType="BIGINT" property="questionId" />
+		<result column="uid" jdbcType="BIGINT" property="uid" />
+		<result column="content" jdbcType="LONGVARCHAR" property="content" />
+		<result column="agree_count" jdbcType="INTEGER" property="agreeCount" />
+		<result column="has_attach" jdbcType="TINYINT" property="hasAttach" />
+		<result column="source" jdbcType="INTEGER" property="source" />
+		<result column="reply_uid" jdbcType="BIGINT" property="replyUid" />
+		<result column="reply_answer_id" jdbcType="BIGINT" property="replyAnswerId" />
+		<result column="city_id" jdbcType="INTEGER" property="cityId" />
+		<result column="created_at" jdbcType="INTEGER" property="createdAt" />
+		<result column="updated_at" jdbcType="INTEGER" property="updatedAt" />
+		<result column="deleted_at" jdbcType="INTEGER" property="deletedAt" />
+		<result column="deleted_self" jdbcType="INTEGER" property="deletedSelf" />
+		<result column="status" jdbcType="TINYINT" property="status" />
+		<result column="good_desc" jdbcType="VARCHAR" property="goodDesc" />
+		<result column="good_at" jdbcType="INTEGER" property="goodAt" />
+		<result column="comment_count" jdbcType="INTEGER" property="comment_count" />
+		
+		<association property="city" javaType="com.xyauto.qa.entity.City">
+			<id property="id" column="city_id" />
+			<result property="name" column="city_name" />
+		</association>
+		<association property="user" javaType="com.xyauto.qa.entity.User">
+			<result property="expert_name" column="expert_name" />
+			<result property="expert_avatar" column="expert_avatar" />
+			<result column="type" property="type" />
+			<result column="is_official" property="isOfficial" />
+		</association>
+		<collection property="attaches" ofType="com.xyauto.qa.entity.Attach">
+			<id property="attachId" column="attach_id" />
+			<result property="file" column="file" />
+			<result property="fileType" column="file_type" />
+		</collection>
+
+	</resultMap>
+	<select id="getAnswerList" parameterType="Answer" resultMap="BaseResultMap">
+		SELECT answer.*, city.id as city_id,city.name as city_name
+		from answer
+		LEFT JOIN city on answer.city_id=city.id
+		LEFT JOIN attach on
+		answer.answer_id=attach.target_id and attach.type=2
+		WHERE
+		answer.deleted_at=0
+		<if test="answerId !=null">
+			and answer_id=#{answerId}
+		</if>
+		<if test="questionId !=null">
+			and question_id=#{questionId}
+		</if>
+		order by answer.created_at desc
+	</select>
+
+	<select id="getAnswerListByMapParam" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT answer.*, city.name as city_name,
+		attach.attach_id as
+		attach_id,attach.file as file,attach.file_type as file_type,
+		user.expert_name,user.expert_avatar,user.type,user.is_official
+		from
+		answer
+		LEFT JOIN city on answer.city_id=city.id
+		LEFT JOIN attach on
+		answer.answer_id=attach.target_id and attach.type=2
+		LEFT JOIN user on
+		answer.uid=user.uid
+		WHERE answer.deleted_at=0
+		<choose>
+			<when test="status!= null">
+				and answer.status=#{status}
+			</when>
+			<otherwise>
+				and answer.status in(1,2)
+			</otherwise>
+		</choose>
+		<if test="answerId !=null">
+			and answer.answer_id=#{answerId}
+		</if>
+		<if test="questionId !=null">
+			and answer.question_id=#{questionId}
+		</if>
+		<if test="uid!= null  ">
+			and answer.uid= #{uid}
+		</if>
+		<if test="hasAttach!= null  ">
+			and answer.has_attach = #{hasAttach}
+		</if>
+		<if test="cityId!= null  ">
+			and city.id = #{cityId}
+		</if>
+		<if test="startTime!= null  ">
+			and answer.created_at &gt;= #{startTime}
+		</if>
+		<if test="endTime!= null  ">
+			and answer.created_at &lt;= #{endTime}
+		</if>
+		<if test="userType!= null  ">
+			and user.type = #{userType}
+		</if>
+		<if test="isOfficial!= null  ">
+			and user.is_official = 1
+		</if>
+		<if test="keyWord!= null  and keyWord!=''">
+			and answer.content LIKE concat('%',#{keyWord},'%')
+		</if>
+		<if test="source != null">
+			and answer.source = #{source}
+		</if>
+		<if test="expert_name!= null  and expert_name!=''">
+			and user.expert_name = #{expert_name}
+		</if>
+		GROUP BY answer.answer_id
+		order by
+		<if test=" sort!=null and sort!='' ">
+			answer.agree_count desc
+		</if>
+		answer.created_at desc
+	</select>
+
+	<select id="getDelAnswerListByMapParam" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT answer.*, city.name as city_name,
+		attach.attach_id as
+		attach_id,attach.file as file,attach.file_type as file_type,
+		user.expert_name,user.expert_avatar,user.type,user.is_official
+		from
+		answer
+		LEFT JOIN city on answer.city_id=city.id
+		LEFT JOIN attach on
+		answer.answer_id=attach.target_id and attach.type=2
+		LEFT JOIN user on
+		answer.uid=user.uid
+		WHERE answer.deleted_at>0
+		<if test="answerId !=null">
+			and answer.answer_id=#{answerId}
+		</if>
+		<if test="questionId !=null">
+			and answer.question_id=#{questionId}
+		</if>
+		<if test="uid!= null  ">
+			and answer.uid= #{uid}
+		</if>
+		<if test="answerId!= null  ">
+			and answer.answer_id= #{answerId}
+		</if>
+		<if test="hasAttach!= null  ">
+			and answer.has_attach = #{hasAttach}
+		</if>
+		<if test="cityId!= null  ">
+			and city.id = #{cityId}
+		</if>
+		<if test="startTime!= null  ">
+			and answer.created_at &gt;= #{startTime}
+		</if>
+		<if test="endTime!= null  ">
+			and answer.created_at &lt;= #{endTime}
+		</if>
+		<if test="userType!= null  ">
+			and user.type = #{userType}
+		</if>
+		<if test="isOfficial!= null  ">
+			and user.is_official = 1
+		</if>
+		<if test="keyWord!= null  and keyWord!=''">
+			and answer.content LIKE concat('%',#{keyWord},'%')
+		</if>
+		<if test="source != null">
+			and answer.source = #{source}
+		</if>
+		<if test="expert_name!= null  and expert_name!=''">
+			and user.expert_name = #{expert_name}
+		</if>
+		GROUP BY answer.answer_id
+		order by
+		<if test=" sort!=null and sort!='' ">
+			answer.agree_count desc
+		</if>
+
+		answer.created_at desc
+	</select>
+
+	<select id="selectAnswerCountByMapGroupHours" parameterType="java.util.Map"
+		resultType="INTEGER">
+		SELECT COUNT(answer.answer_id) from tbl_qa_hours qah
+		LEFT
+		JOIN answer on
+		qah.hour_id=FROM_UNIXTIME(answer.created_at,'%H')
+		and
+		answer.deleted_at=0
+		and answer.status in(1,2)
+		and
+		<choose>
+			<when test="beforeDay !=null and beforeDay>0">
+				FROM_UNIXTIME(answer.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+				#{beforeDay} day)
+			</when>
+			<otherwise>
+				FROM_UNIXTIME(answer.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+				1 day)
+			</otherwise>
+		</choose>
+		GROUP BY
+		qah.hour_id ORDER BY qah.hour_id
+	</select>
+	<!-- 查询标兵和专家每日总回复数 -->
+	<select id="selectAnswerCountGroupHoursUserType" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT qah.hour_id as create_at ,u.type as
+		source,COUNT(t.answer_id) as agree_count
+		from tbl_qa_hours qah
+		LEFT JOIN `user` u on u.type in(1,2)
+		LEFT JOIN 
+		(select * from answer where answer.deleted_at=0
+		 and answer.`status` in(1,2)
+         and content not LIKE '投票给了%'
+         <choose>
+			<when test="beforeDay !=null and beforeDay>0">
+				and
+				FROM_UNIXTIME(answer.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+				#{beforeDay} day)
+			</when>
+			<otherwise>
+				and
+				FROM_UNIXTIME(answer.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+				1 day)
+			</otherwise>
+		</choose>
+        ) t on u.uid=t.uid and qah.hour_id=FROM_UNIXTIME(t.created_at,'%H')
+		 
+		GROUP BY
+		qah.hour_id ,u.type
+		ORDER BY qah.hour_id,u.type
+	</select>
+	<select id="selectAnswerSourceGroupHoursUserType" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT qah.hour_id as created_at ,tqt.type_value as source,
+		COUNT(answer.answer_id) as
+		agree_count
+		from tbl_qa_hours qah
+		LEFT JOIN
+		tbl_qa_type tqt
+		on tqt.type='source'
+		left join
+		answer on
+		FROM_UNIXTIME(answer.created_at,'%H')=qah.hour_id and
+		tqt.type_value=answer.source
+		<choose>
+			<when test="beforeDay !=null and beforeDay>0">
+				and
+				FROM_UNIXTIME(answer.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+				#{beforeDay} day)
+			</when>
+			<otherwise>
+				and
+				FROM_UNIXTIME(answer.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+				1 day)
+			</otherwise>
+		</choose>
+
+		GROUP
+		BY qah.hour_id, tqt.type_value ORDER BY qah.hour_id
+	</select>
+	<!-- 统计答题数  -->
+	<select id="selectAnswerQueCountGroupByTimeDayUid"
+		parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT u.uid,COUNT(DISTINCT(tt.question_id)) as agree_count
+		from `user` u
+		LEFT JOIN (
+		SELECT a.uid,a.question_id
+		from question q ,answer a
+		where q.deleted_at=0
+		and q.question_id=a.question_id
+		and a.deleted_at=0
+		and a.content not like '投票给了%'
+		<if test="beforeDay !=null">
+			and
+			FROM_UNIXTIME(a.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+			#{beforeDay} day)
+		</if>
+		<if test="content!=null">
+			and CHAR_LENGTH(TRIM( a.content))>=#{content}
+		</if>
+		<if test="startHour!=null">
+			and FROM_UNIXTIME(a.created_at,'%H')
+			BETWEEN #{startHour} and #{endHour}
+		</if>
+		) tt
+		on u.uid=tt.uid
+		where u.type in (1,2)
+		GROUP BY u.uid ORDER BY u.uid
+	</select>
+	<!-- 统计回复 -->
+	<select id="selectAnswersCountGroupByTimeDayUid" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT `user`.uid,count(answer.answer_id) as
+		agree_count from `user`
+		LEFT JOIN answer on answer.uid=`user`.uid and answer.deleted_at=0 and
+		answer.`status` in (1,2)
+		and answer.content not like '投票给了%'
+		<if test="beforeDay !=null">
+			and
+			FROM_UNIXTIME(answer.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+			#{beforeDay} day)
+		</if>
+		<if test="content!=null">
+			and CHAR_LENGTH(TRIM( answer.content))>=#{content}
+		</if>
+		<if test="startHour!=null and endHour!=null">
+			and FROM_UNIXTIME(answer.created_at,'%H')
+			BETWEEN #{startHour} and #{endHour}
+		</if>
+		where `user`.type in(1,2)
+		GROUP BY `user`.uid ORDER BY `user`.uid
+	</select>
+	<select id="selectAnswersCountByContentGroupUid" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT `user`.uid,count(answer.answer_id) as
+		agree_count from
+		`user`
+		LEFT JOIN answer on answer.uid=`user`.uid
+		and answer.deleted_at=0
+		and
+		answer.`status` in (1,2)
+
+		and CHAR_LENGTH(TRIM( answer.content))>=30
+		where `user`.type in(1,2)
+		GROUP
+		BY `user`.uid ORDER BY `user`.uid;
+	</select>
+	<select id="selectAnswersQueCountByContentGroupUid"
+		parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT
+		`user`.uid,count(DISTINCT(answer.question_id)) as
+		agree_count from
+		`user`
+		LEFT JOIN answer on answer.uid=`user`.uid and
+		answer.deleted_at=0 and
+		answer.`status` in (1,2)
+
+		and CHAR_LENGTH(TRIM( answer.content))>=30
+		where `user`.type in(1,2)
+		GROUP
+		BY `user`.uid ORDER BY `user`.uid;
+	</select>
+
+	<select id="selectAnswerUserCount" parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(DISTINCT(a.uid)) from answer a,`user` u
+		where a.deleted_at=0
+		<choose>
+			<when
+				test="startTime!=null and startTime!='' and endTime!=null and endTime!='' ">
+				and FROM_UNIXTIME(a.created_at,'%Y-%m-%d')
+				BETWEEN #{startTime} and #{endTime}
+			</when>
+			<otherwise>
+				and
+				FROM_UNIXTIME(a.created_at,'%Y-%m-%d')=date_sub(curdate(),interval 1
+				day)
+			</otherwise>
+		</choose>
+		and a.`status` IN (1,2)
+
+		and a.uid = u.uid
+		and u.type=#{userType}
+	</select>
+
+	<select id="selectAnswerByAgreencount" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT * from answer
+		where deleted_at=0
+		and `status` in (1,2)
+
+		and FROM_UNIXTIME(created_at,'%Y%m%d')
+		BETWEEN #{startTime} and #{endTime}
+		ORDER BY agree_count DESC LIMIT 20
+	</select>
+	<select id="exportAnswer" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT a.* from answer a
+		where a.deleted_at=0
+		and a.`status` in (1,2)
+
+		<if test="startTime!=null">
+			and a.created_at
+			BETWEEN #{startTime} and #{endTime}
+		</if>
+		<if test="keyWord!= null  and keyWord!=''">
+			and a.content LIKE concat('%',#{keyWord},'%')
+		</if>
+	</select>
+	<select id="selectCallAnswerGroupHoursSource" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT tqh.hour_id as create_at,tqt.type_value as source,
+		COUNT(a.answer_id) as agree_count
+		from tbl_qa_hours tqh
+		LEFT JOIN tbl_qa_type tqt on tqt.type='source'
+		LEFT JOIN question q
+		on tqt.type_value=q.source
+		LEFT JOIN answer a
+		on tqh.hour_id=FROM_UNIXTIME(a.created_at,'%H')
+		and a.question_id=q.question_id
+		<choose>
+			<when test="beforeDay !=null and beforeDay>0">
+				and FROM_UNIXTIME(a.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+				#{beforeDay} day)
+			</when>
+			<otherwise>
+				and FROM_UNIXTIME(a.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+				1 day)
+			</otherwise>
+		</choose>
+
+		<choose>
+			<when test="type  !=null and type ==2">
+				and a.third_id!=''
+			</when>
+		</choose>
+		GROUP BY tqh.hour_id,tqt.type_value
+		ORDER BY tqh.hour_id
+	</select>
+	<!-- 抢0回 -->
+	<select id="selectFirstAnswerQueCountGroupDayUid" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT u.type as source,u.uid,COUNT(r.answer_id) as agree_count
+		from `user` u
+		LEFT JOIN
+		( SELECT m.uid,m.answer_id from answer m,
+		(SELECT MIN(a.answer_id) as answer_id
+		from answer a,question q
+		where a.question_id=q.question_id
+		and q.deleted_at=0
+		and a.deleted_at=0
+		<choose>
+			<when test="beforeDay !=null and beforeDay>0">
+				and FROM_UNIXTIME(q.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+				#{beforeDay} day)
+				and FROM_UNIXTIME(a.created_at,'%Y-%m-%d %H-%i')
+				BETWEEN CONCAT(date_sub(curdate(),interval #{beforeDay} day),' 00-00')
+				and CONCAT(date_sub(curdate(),interval #{beforeDay}-1 day),' 00-30')
+			</when>
+			<otherwise>
+				and FROM_UNIXTIME(q.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+				1 day)
+				and FROM_UNIXTIME(a.created_at,'%Y-%m-%d %H-%i')
+				BETWEEN CONCAT(date_sub(curdate(),interval 1 day),' 00-00')
+				and CONCAT(CURDATE(),' 00-30')
+			</otherwise>
+		</choose>
+		GROUP BY a.question_id
+		ORDER BY a.uid) tt
+		where m.answer_id=tt.answer_id
+		and CHAR_LENGTH(TRIM( m.content))>=30
+		and m.content not like '投票给了%'
+		) r
+		on u.uid=r.uid
+		WHERE u.type in (1,2)
+		GROUP BY u.uid
+		ORDER BY u.uid
+	</select>
+
+	<select id="selectAnswerId" parameterType="java.lang.Long"
+		resultType="java.lang.Long">
+		select answer_id from answer
+		where uid=${_parameter} and deleted_at=0
+		order by created_at desc LIMIT 50
+	</select>
+	<select id="selectAnswerQueCountByAnswerQueTime" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT u.uid,m.agree_count
+		from `user` u LEFT JOIN
+		(SELECT aa.uid,COUNT(aa.question_id) as agree_count
+		from answer aa,
+		question q ,
+		(SELECT MIN(a.answer_id) as answer_id
+		from answer a,question q
+		where a.deleted_at=0
+		and a.question_id=q.question_id
+		<if test="length!=null">
+			and CHAR_LENGTH(TRIM( a.content))>=#{length}
+		</if>
+		<choose>
+			<when test="beforeDay !=null">
+				and FROM_UNIXTIME(q.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+				#{beforeDay} day)
+				and FROM_UNIXTIME(a.created_at,'%Y-%m-%d %H-%i')
+				BETWEEN CONCAT(date_sub(curdate(),interval #{beforeDay} day),' 00-00')
+				and CONCAT(date_sub(curdate(),interval #{beforeDay}-1 day),' 00-30')
+			</when>
+			<otherwise>
+				and FROM_UNIXTIME(q.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+				1 day)
+				and FROM_UNIXTIME(a.created_at,'%Y-%m-%d %H-%i')
+				BETWEEN CONCAT(date_sub(curdate(),interval 1 day),' 00-00')
+				and CONCAT(CURDATE(),' 00-30')
+			</otherwise>
+		</choose>
+		GROUP BY a.question_id,a.uid
+		ORDER BY a.uid) t
+		where aa.answer_id=t.answer_id
+		and q.question_id=aa.question_id
+		<if test="second!=null and second >0">
+			and (aa.created_at-q.created_at)&lt;=#{second}
+		</if>
+		GROUP BY uid ) m
+		on m.uid=u.uid
+		where 1=1
+		<if test="userType!=null">
+			and u.type=#{userType}
+		</if>
+	</select>
+	<!-- 专家答题数 -->
+	<select id="selectAnswerQueCount" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT `user`.uid,count(DISTINCT(answer.question_id)) as
+		agree_count
+		from `user`
+		LEFT JOIN answer on answer.uid=`user`.uid and
+		answer.deleted_at=0
+		and answer.`status` in (1,2)
+		and answer.content not like '投票给了%'
+		<if test="beforeDay !=null">
+			and
+			FROM_UNIXTIME(answer.created_at,'%Y-%m-%d')=date_sub(curdate(),interval
+			#{beforeDay} day)
+		</if>
+		<if test="length!=null">
+			and CHAR_LENGTH(TRIM( answer.content))>=#{length}
+		</if>
+		where 1=1
+		<if test="userType!=null">
+			and `user`.type =#{userType}
+		</if>
+		GROUP BY `user`.uid
+		ORDER BY `user`.uid
+	</select>
+
+	<select id="selectHingEnergyAnswer" parameterType="Answer"
+		resultMap="BaseResultMap">
+		SELECT a.* ,att.file,att.attach_id,att.file_type
+		FROM answer a,attach att,`user` u
+		where a.deleted_at=0
+		and CHAR_LENGTH(TRIM( a.content))>=200
+		and att.type=2
+		and a.answer_id=att.target_id
+		and att.file_type=0
+		and u.uid=a.uid
+		and u.type=2
+		and att.deleted_at=0
+		and a.question_id=#{questionId}
+		<choose>
+			<when test="goodAt!=null and goodAt==1">
+				and a.good_at>0
+			</when>
+			<when test="goodAt!=null and goodAt==0">
+				and a.good_at==0
+			</when>
+		</choose>
+		ORDER BY a.created_at DESC
+	</select>
+	<select id="selectPushHingEnergy" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT u.uid,COUNT(a.answer_id) as agree_count
+		from answer a,`user` u
+		where a.deleted_at=0
+		and a.uid=u.uid
+		and a.good_at>0
+		and u.type=2
+		and FROM_UNIXTIME(a.created_at,'%Y%m')=#{time}
+		<if test="uid!=null">
+			and a.uid=#{uid}
+		</if>
+		GROUP BY u.uid
+		ORDER BY u.uid
+	</select>
+	
+	<select id="selectFirstAnswer" parameterType="java.lang.Long" resultMap="BaseResultMap">
+	SELECT * FROM answer 
+    where question_id=(SELECT question_id from answer where answer_id=${_parameter}) 
+    ORDER BY created_at LIMIT 1
+	</select>
+	<update id="setFirstAnswer" parameterType="Answer">
+	UPDATE answer a,(SELECT MIN(created_at)-1 as created_at from answer where question_id=#{questionId}) b 
+    SET a.created_at=b.created_at
+    where a.answer_id= #{answerId};
+	</update>
+
+</mapper>

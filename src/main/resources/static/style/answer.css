@@ -1,0 +1,15 @@
+.popupcontent{ 
+position:absolute;	
+/**
+*position: relative;
+
+margin:0 auto;
+**/ 
+margin:0 auto; padding:0;
+visibility: hidden; 
+overflow: hidden; 
+border:1px solid #CCC; 
+background-color:#F9F9F9; 
+border:1px solid #333; 
+padding:5px; 
+} 

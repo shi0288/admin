@@ -1,0 +1,52 @@
+package com.xyauto.qa.util;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+import org.joda.time.DateTime;
+
+public class DateUtils {
+	public static Date strToDate(String date) {
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		try {
+			return sdf.parse(date);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;		
+	}
+	//日期转字符串
+	public static String dateToStr(Date date){
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMdd");
+		return sdf.format(date);		 
+	}
+	
+	//获取指定日期的前N天
+	public static String beforDateToStr(Date date,int num){
+		Calendar calendar =Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.DAY_OF_MONTH, -num);
+		date = calendar.getTime();
+		return dateToStr(date);
+	}
+<<<<<<< .mine
+=======
+	//
+	public static String intToDateString(int time) {
+		Date date =new Date(time*1000L);
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return sdf.format(date);
+	}
+>>>>>>> .r129
+
+
+	public static Integer getTimes(){
+		long temp=System.currentTimeMillis()/1000;
+		return (int)temp;
+	}
+
+	
+}

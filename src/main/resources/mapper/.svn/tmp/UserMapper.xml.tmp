@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyauto.qa.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="com.xyauto.qa.entity.User">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="uid" jdbcType="BIGINT" property="uid"/>
+        <result column="type" jdbcType="TINYINT" property="type"/>
+        <result column="word" jdbcType="VARCHAR" property="word"/>
+        <result column="intro" jdbcType="VARCHAR" property="intro"/>
+        <result column="expert_name" jdbcType="VARCHAR" property="expert_name"/>
+        <result column="expert_avatar" jdbcType="VARCHAR" property="expert_avatar"/>
+        <result column="expert_images" jdbcType="VARCHAR" property="expert_images"/>
+        <result column="question_count" jdbcType="INTEGER" property="question_count"/>
+        <result column="answer_count" jdbcType="INTEGER" property="answer_count"/>
+        <result column="category_ids" jdbcType="VARCHAR" property="category_ids"/>
+        <result column="company_name" jdbcType="VARCHAR" property="company_name"/>
+        <result column="company_intro" jdbcType="VARCHAR" property="company_intro"/>
+        <result column="lng" jdbcType="REAL" property="lng"/>
+        <result column="lat" jdbcType="REAL" property="lat"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="released_at" jdbcType="INTEGER" property="released_at"/>
+        <result column="forbbiden_reason" jdbcType="VARCHAR" property="forbbiden_reason"/>
+        <result column="created_at" jdbcType="INTEGER" property="created_at"/>
+        <result column="updated_at" jdbcType="INTEGER" property="updated_at"/>
+        <result column="deleted_at" jdbcType="INTEGER" property="deleted_at"/>
+        <collection property="series" ofType="com.xyauto.qa.entity.Series">
+            <id property="seriesId" column="series_id"/>
+            <result property="name" column="name"/>
+            <result property="brandId" column="brand_id"/>
+        </collection>
+    </resultMap>
+
+    <update id="updateUserStatus" parameterType="User">
+        UPDATE user
+        SET status=#{status}
+        WHERE uid=#{uid}
+    </update>
+
+
+    <update id="updateUserType" parameterType="User">
+        UPDATE user
+        SET type=#{type}
+        WHERE uid=#{uid}
+    </update>
+
+
+    <select id="getUserById" parameterType="long" resultMap="BaseResultMap">
+         select user.*,series.series_id,series.name,series.brand_id
+         from user
+         LEFT JOIN user_car on user.uid = user_car.uid  AND  user_car.deleted_at=0
+         LEFT JOIN series on user_car.series_id=series.series_id
+         where   user.uid=#{uid}
+    </select>
+
+
+    <resultMap id="BrandResultMap" type="com.xyauto.qa.entity.User">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="uid" jdbcType="BIGINT" property="uid"/>
+        <result column="type" jdbcType="TINYINT" property="type"/>
+        <result column="word" jdbcType="VARCHAR" property="word"/>
+        <result column="intro" jdbcType="VARCHAR" property="intro"/>
+        <result column="expert_name" jdbcType="VARCHAR" property="expert_name"/>
+        <result column="expert_avatar" jdbcType="VARCHAR" property="expert_avatar"/>
+        <result column="expert_images" jdbcType="VARCHAR" property="expert_images"/>
+        <result column="question_count" jdbcType="INTEGER" property="question_count"/>
+        <result column="answer_count" jdbcType="INTEGER" property="answer_count"/>
+        <result column="category_ids" jdbcType="VARCHAR" property="category_ids"/>
+        <result column="company_name" jdbcType="VARCHAR" property="company_name"/>
+        <result column="company_intro" jdbcType="VARCHAR" property="company_intro"/>
+        <result column="lng" jdbcType="REAL" property="lng"/>
+        <result column="lat" jdbcType="REAL" property="lat"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="released_at" jdbcType="INTEGER" property="released_at"/>
+        <result column="forbbiden_reason" jdbcType="VARCHAR" property="forbbiden_reason"/>
+        <result column="created_at" jdbcType="INTEGER" property="created_at"/>
+        <result column="updated_at" jdbcType="INTEGER" property="updated_at"/>
+        <result column="deleted_at" jdbcType="INTEGER" property="deleted_at"/>
+        <collection property="brands" ofType="com.xyauto.qa.entity.Brand">
+            <id property="brandId" column="brand_id"/>
+            <result property="name" column="brand_name"/>
+            <collection property="series" ofType="com.xyauto.qa.entity.Series">
+                <id property="seriesId" column="series_id"/>
+                <result property="name" column="series_name"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+
+    <select id="getUserBrandsById" parameterType="long" resultMap="BrandResultMap">
+        select user.*,series.series_id,series.name as series_name,brand.brand_id,brand.name as brand_name
+        from user
+        LEFT JOIN user_car on user.uid = user_car.uid  AND  user_car.deleted_at=0
+        LEFT JOIN brand on brand.brand_id=user_car.brand_id
+        LEFT JOIN series on series.series_id=user_car.series_id
+        where  user.uid=#{uid}
+    </select>
+
+
+    <update id="updateUser" parameterType="User">
+        UPDATE user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="expert_name!=null ">
+                expert_name = #{expert_name},
+            </if>
+            <if test="word!=null">
+                word = #{word},
+            </if>
+            <if test="intro!=null">
+                intro = #{intro},
+            </if>
+            <if test="expert_avatar!=null">
+                expert_avatar = #{expert_avatar},
+            </if>
+            <if test="category_ids!=null">
+                category_ids = #{category_ids},
+            </if>
+            <if test="company_name!=null">
+                company_name = #{company_name},
+            </if>
+            <if test="company_intro!=null">
+                company_intro = #{company_intro},
+            </if>
+            <if test="type!=null">
+                type = #{type},
+            </if>
+        </trim>
+        WHERE uid = #{uid};
+    </update>
+    <select id="selectUserByQuestioncount" parameterType="java.util.Map" resultMap="BaseResultMap">
+    SELECT u.uid,COUNT(q.question_id) as question_count,u.type 
+    from `user` u,question q
+    where u.uid=q.uid
+    and q.deleted_at=0
+    and q.`status` in (1,2)
+    and q.source !=999
+    and FROM_UNIXTIME(q.created_at,'%Y%m%d')
+    BETWEEN  #{startTime} and #{endTime}
+    GROUP BY uid 
+    ORDER BY COUNT(q.question_id) DESC limit 50
+    </select>
+    <select id="selectUserByAnswercount" parameterType="java.util.Map" resultMap="BaseResultMap">
+    SELECT u.uid,COUNT(a.answer_id) as answer_count,u.type 
+    from `user` u,answer a
+    where u.uid=a.uid
+    and a.deleted_at=0
+    and a.`status` in (1,2)
+    and a.source !=999
+    and FROM_UNIXTIME(a.created_at,'%Y%m%d')
+    BETWEEN  #{startTime} and #{endTime}
+    GROUP BY uid 
+    ORDER BY COUNT(a.answer_id) DESC limit 50
+    </select>
+
+
+</mapper>

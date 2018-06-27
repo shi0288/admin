@@ -1,0 +1,187 @@
+package com.xyauto.bi.controller;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.alibaba.fastjson.JSONObject;
+import com.xyauto.bi.entity.QuestionBi;
+import com.xyauto.bi.entity.QuestionTypeBi;
+import com.xyauto.bi.service.IQuestionBIService;
+import com.xyauto.bi.service.IQuestionBiExcleService;
+import com.xyauto.qa.controller.AjaxBaseController;
+import com.xyauto.qa.util.DateUtils;
+
+/**
+ * 
+ * @author zhangbh
+ *
+ */
+@Controller
+@RequestMapping("user/biData")
+public class QuestoinBIController extends AjaxBaseController {
+	@Autowired
+	private IQuestionBIService questionBIService;
+	@Autowired
+	private IQuestionBiExcleService questionBiExcleService;
+
+<<<<<<< .mine
+	@RequestMapping("qustionBasic")
+	public void qustionBasic(String startDay, String endDay) {
+		//
+		questionBIService.insertQuestionBI();
+	}
+
+	@RequestMapping("insertQuestionType")
+	public void insertQuestionType() {
+		questionBIService.insertQuestionTypeBI();
+	}
+
+	@RequestMapping("initBi")
+	public void initBi() {}
+
+	@RequestMapping("insertQuestionUser")
+	public void insertQuestionUser() {
+		questionBIService.insertQuestionUserBI();
+	}
+
+=======
+>>>>>>> .r125
+	@RequestMapping("exportQueBi")
+	public void exportQueBi(HttpServletResponse response, String startTime,
+			String endTime) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("startTime", startTime);
+		map.put("endTime", endTime);
+		questionBiExcleService.exportQuestionBi(response, map);
+	}
+	
+	@RequestMapping("exportQueTypeBi")
+	public void exportQueTypeBi(HttpServletResponse response, String startTime,
+			String endTime) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("startTime", startTime);
+		map.put("endTime", endTime);
+		questionBiExcleService.exportQuestionTypeBi(response, map);
+	}
+	@RequestMapping("exportQueUserBi")
+	public void exportQueUserBi(HttpServletResponse response, String startTime,
+			String endTime) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("startTime", startTime);
+		map.put("endTime", endTime);
+		questionBiExcleService.exportQuestionUserBi(response, map);
+	}
+	
+	@RequestMapping("basicBi")
+	public void basicBi(ModelMap modelMap,String startTime,String endTime){
+		//查询基本数据
+		modelMap.put("startTime", startTime);
+		modelMap.put("endTime", endTime);
+		QuestionBi questionBi = questionBIService.selectQuestionBi(modelMap);
+		if (questionBi==null) {
+			return ;
+		}
+		List<QuestionTypeBi> typeList = questionBIService
+				.selectQuestionTypeBi(modelMap);
+		//获取活跃度
+		String expertActive=questionBIService.selectActiveUser(startTime, endTime, 2);
+		String pacesetterActive=questionBIService.selectActiveUser(startTime, endTime, 1);
+		//计算平均时间
+		int avgTime=0;
+		if (questionBi.getRemark1()>0) {
+			avgTime=questionBi.getRemark2()/questionBi.getRemark1()/60;
+		}
+		modelMap.put("questionBi", questionBi);
+		modelMap.put("typeList", typeList);
+		modelMap.put("expertActive", expertActive);
+		modelMap.put("pacesetterActive", pacesetterActive);
+		modelMap.put("avgTime", avgTime);
+		
+	}
+	@RequestMapping("topBi")
+	public void topbi(ModelMap modelMap,String startTime,String endTime,Integer selectType){
+		if (selectType==null) {
+			return;
+		}
+		//默认查询当天数据
+		if (StringUtils.isBlank(startTime)||StringUtils.isBlank(endTime)) {
+			startTime=endTime=DateUtils.dateToStr(new Date());
+		}	
+		modelMap.put("startTime", startTime);
+		modelMap.put("endTime", endTime);
+		//查询车型		
+		List list=null;
+		if (selectType==1) {
+			list=questionBIService.selectCarsByQuesitoncount(startTime, endTime);			
+		}
+		else if (selectType==2) {
+			//查询问题
+			list=questionBIService.selectQuestionByAnswercount(startTime, endTime);	
+		}else if(selectType==3){
+			//查询回复
+			list=questionBIService.selectAnswerByAgreencount(startTime, endTime);
+		}else if(selectType==4){
+			//查询发布问题最多的用户
+			list=questionBIService.selectUserByQueCountOrAnsCount(startTime, endTime, "question");
+		}else if(selectType==5){
+			//查询回答数最多的用户
+			list=questionBIService.selectUserByQueCountOrAnsCount(startTime, endTime, "answer");
+		}else if(selectType==6){
+			//查询发布问题最多的城市
+			list=questionBIService.selectCity(startTime, endTime, "question");
+		}else if(selectType==7){
+			//查询回复内容最多的城市
+			list=questionBIService.selectCity(startTime, endTime, "answer");
+		}
+		modelMap.put("selectType", selectType);
+		modelMap.put("list", list);
+	}
+	@RequestMapping("exportTopBi")
+	public void exportTopBi(HttpServletResponse response,String startTime,String endTime,Integer selectType){
+		if (selectType==null) {
+			return;
+		}
+		//默认查询当天数据
+		if (StringUtils.isBlank(startTime)||StringUtils.isBlank(endTime)) {
+			startTime=endTime=DateUtils.dateToStr(new Date());
+		}	
+		if (selectType==1) {
+			questionBiExcleService.exportCarsByQuesitoncount(response,startTime, endTime);
+		}
+		else if (selectType==2) {
+			//查询问题
+			questionBiExcleService.exportQuestionByAnswercount(response,startTime, endTime);
+		}else if(selectType==3){
+			//查询回复
+			questionBiExcleService.exportAnswerByAgreencount(response,startTime, endTime);
+		}else if(selectType==4){
+			//查询发布问题最多的用户
+			questionBiExcleService.exportUserByQueCountOrAnsCount(response,startTime, endTime, "question");
+		}else if(selectType==5){
+			//查询回答数最多的用户
+			questionBiExcleService.exportUserByQueCountOrAnsCount(response,startTime, endTime, "answer");
+		}else if(selectType==6){
+			//查询发布问题最多的城市
+			questionBiExcleService.exportCity(response,startTime, endTime, "question");
+		}else if(selectType==7){
+			//查询回复内容最多的城市
+			questionBiExcleService.exportCity(response,startTime, endTime, "answer");
+		}		
+	}
+	
+    @ModelAttribute("urlObj")
+    public JSONObject getUrlObj() {
+        return super.getUrlObj();
+    }
+}

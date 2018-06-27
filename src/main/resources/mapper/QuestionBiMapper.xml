@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyauto.bi.mapper.QuestionBiMapper">
+	<resultMap id="BaseResultMap" type="com.xyauto.bi.entity.QuestionBi">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<id column="question_count" jdbcType="INTEGER" property="questionCount" />
+		<id column="buy_car_count" jdbcType="INTEGER" property="buyCarCount" />
+		<id column="sell_car_count" jdbcType="INTEGER" property="sellCarCount" />
+		<id column="good_count" jdbcType="INTEGER" property="goodCount" />
+		<id column="has_attach_count" jdbcType="INTEGER" property="hasAttachCount" />
+		<id column="answer_count" jdbcType="INTEGER" property="answerCount" />
+		<id column="created_at" jdbcType="INTEGER" property="createdAt" />
+		<id column="hours" jdbcType="TINYINT" property="hours" />
+		<id column="remark1" jdbcType="INTEGER" property="remark1" />
+		<id column="remark2" jdbcType="INTEGER" property="remark2" />
+		<id column="remark3" jdbcType="INTEGER" property="remark3" />
+		<id column="remark4" jdbcType="INTEGER" property="remark4" />
+		<id column="remark5" jdbcType="INTEGER" property="remark5" />
+		<id column="remark6" jdbcType="INTEGER" property="remark6" />
+	</resultMap>
+
+	<sql id="Base_Column">
+		id,question_count,buy_car_count,sell_car_count,good_count,has_attach_count,
+		answer_count,created_at,hours,remark1,remark2,remark3,remark4,remark5,remark6
+	</sql>
+
+	<sql id="Base_Sum_Column">
+		SUM(question_count) as question_count,SUM(buy_car_count) as
+		buy_car_count,
+		SUM(sell_car_count) as sell_car_count,SUM(good_count) as
+		good_count,
+		SUM(has_attach_count) as has_attach_count,SUM(answer_count)
+		as
+		answer_count,
+		SUM(remark1) as remark1,
+		SUM(remark2) as remark2
+	</sql>
+
+	<insert id="insert" parameterType="java.util.List">
+		insert into tbl_question_bi
+		(question_count,buy_car_count,sell_car_count,good_count,has_attach_count,
+		answer_count,created_at,hours,remark1,remark2,remark3,remark4,remark5,remark6)
+		values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.questionCount,jdbcType=INTEGER},#{item.buyCarCount,jdbcType=INTEGER},
+			#{item.sellCarCount,jdbcType=INTEGER},#{item.goodCount,jdbcType=INTEGER},
+			#{item.hasAttachCount,jdbcType=INTEGER},#{item.answerCount,jdbcType=INTEGER},
+			#{item.createdAt,jdbcType=INTEGER},#{item.hours,jdbcType=TINYINT},
+			#{item.remark1,jdbcType=INTEGER},#{item.remark2,jdbcType=INTEGER},
+			#{item.remark3,jdbcType=INTEGER},#{item.remark4,jdbcType=INTEGER},
+			#{item.remark5,jdbcType=INTEGER},#{item.remark6,jdbcType=INTEGER})
+
+		</foreach>
+	</insert>
+
+	<select id="selectByMap" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		select
+		(created_at-24*3600) as created_at,
+		<include refid="Base_Sum_Column" />
+		from tbl_question_bi
+		where 1=1
+		<choose>
+			<when
+				test="startTime!=null and startTime!='' and endTime!=null and endTime!='' ">
+				and date_sub(FROM_UNIXTIME(created_at,'%Y%m%d'),interval 1 day)
+				BETWEEN #{startTime} and #{endTime}
+			</when>
+			<otherwise>
+				and FROM_UNIXTIME(created_at,'%Y-%m-%d')=CURDATE()
+			</otherwise>
+		</choose>
+		ORDER BY created_at
+	</select>
+	<select id="selectQuetionBiGroupByDay" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		select
+		(created_at-24*3600) as created_at,
+		<include refid="Base_Sum_Column" />
+		from tbl_question_bi
+		where FROM_UNIXTIME(created_at,'%Y%m%d')
+		BETWEEN
+		#{startTime} and #{endTime}
+		GROUP BY FROM_UNIXTIME(created_at,'%Y%m%d')
+	</select>
+	<select id="selectCarAdviser" parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(answer_id) from answer a,`user` u
+		where a.deleted_at=0
+		and
+		a.uid=u.uid
+		and u.type=3
+		<choose>
+			<when
+				test="startTime!=null and startTime!='' and endTime!=null and endTime!='' ">
+				and FROM_UNIXTIME(a.created_at,'%Y-%m-%d')
+				BETWEEN #{startTime} and #{endTime}
+			</when>
+			<otherwise>
+				and
+				FROM_UNIXTIME(a.created_at,'%Y-%m-%d')=date_sub(curdate(),interval 1
+				day)
+			</otherwise>
+		</choose>
+		union all
+		SELECT COUNT(DISTINCT(a.question_id)) from answer a,`user` u
+		where a.deleted_at=0
+		and a.uid=u.uid
+		and u.type=3
+		<choose>
+			<when
+				test="startTime!=null and startTime!='' and endTime!=null and endTime!='' ">
+				and FROM_UNIXTIME(a.created_at,'%Y-%m-%d')
+				BETWEEN #{startTime} and #{endTime}
+			</when>
+			<otherwise>
+				and
+				FROM_UNIXTIME(a.created_at,'%Y-%m-%d')=date_sub(curdate(),interval 1
+				day)
+			</otherwise>
+		</choose>
+		UNION all
+		SELECT COUNT(DISTINCT(a.uid)) from answer a,`user` u
+		where a.deleted_at=0
+		and a.uid=u.uid
+		and u.type=3
+		<choose>
+			<when
+				test="startTime!=null and startTime!='' and endTime!=null and endTime!='' ">
+				and FROM_UNIXTIME(a.created_at,'%Y-%m-%d')
+				BETWEEN #{startTime} and #{endTime}
+			</when>
+			<otherwise>
+				and
+				FROM_UNIXTIME(a.created_at,'%Y-%m-%d')=date_sub(curdate(),interval 1
+				day)
+			</otherwise>
+		</choose>
+	</select>
+	
+	<delete id="delete" parameterType="java.lang.Integer" >
+	  DELETE from tbl_question_bi 
+      <where>
+         <if test="_parameter !=null and _parameter >0">
+           FROM_UNIXTIME(created_at,'%Y-%m-%d')=date_sub(curdate(),interval ${_parameter}-1
+				day)
+         </if>
+      </where>  
+	</delete>
+</mapper>

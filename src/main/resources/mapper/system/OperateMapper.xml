@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyauto.system.mapper.OperateMapper">
+	<resultMap type="com.xyauto.system.entiy.Operate" id="BaseResultMap">
+		<id column="operate_id" jdbcType="INTEGER" property="operateId" />
+		<result column="operate_name" jdbcType="VARCHAR" property="operateName" />
+		<result column="operate_type" jdbcType="TINYINT" property="operateType" />
+		<result column="url" jdbcType="VARCHAR" property="url" />
+		<result column="mid" jdbcType="INTEGER" property="mid" />
+		<result column="created_at" jdbcType="INTEGER" property="createdAt" />
+		<result column="deleted_at" jdbcType="INTEGER" property="deletedAt" />
+	</resultMap>
+	
+	<resultMap type="com.xyauto.system.vo.MenuOperateVo" id="MenuOperateResultMap">
+		<result column="operate_id" jdbcType="INTEGER" property="operateId" />
+		<result column="operate_name" jdbcType="VARCHAR" property="operateName" />
+		<result column="mid" jdbcType="INTEGER" property="mid" />
+		<result column="menu_name" jdbcType="VARCHAR" property="menuName" />
+	</resultMap>
+	
+	<sql id="base_cloumn">
+		operate_id,operate_name,operate_type,url,mid,created_at,deleted_at
+	</sql>
+	<sql id="base_where">
+		<if test="operateId!=null">
+			and operate_id=#{operateId}
+		</if>
+		<if test="operateName!=null and operateName!='' ">
+			and operate_name LIKE concat('%',#{operateName},'%')
+		</if>
+		<if test="operateType!=null">
+			and operate_type=#{operateType}
+		</if>
+		<if test="mid!=null">
+			and mid=#{mid}
+		</if>
+		<if test="deletedAt!=null and deletedAt>0">
+			and deleted_at &gt; 0
+		</if>
+	</sql>
+	<select id="selectList" parameterType="com.xyauto.system.entiy.Operate" resultMap="BaseResultMap">
+		SELECT
+		<include refid="base_cloumn" />
+		from tbl_qa_system_operate
+		where 1=1
+		<include refid="base_where" />
+	</select>
+	<insert id="insertOperate" parameterType="com.xyauto.system.entiy.Operate" useGeneratedKeys="true" keyProperty="operateId">
+		INSERT into tbl_qa_system_operate
+		(operate_name,operate_type,url,mid,created_at,deleted_at)
+		 VALUES
+		(#{operateName},
+		#{operateType},
+		#{url},
+		#{mid},
+		UNIX_TIMESTAMP(NOW()),
+		0)
+	</insert>
+	<select id="selectOperate" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+	  SELECT
+		<include refid="base_cloumn" />
+		from tbl_qa_system_operate
+		where operate_id=${_parameter}
+	</select>
+	
+	<select id="selectMenuOperate" parameterType="com.xyauto.system.entiy.Operate" resultMap="MenuOperateResultMap">
+	 SELECT qsm.mid,qsm.menu_name,qso.operate_id,qso.operate_name,qso.url,qso.operate_type 
+     FROM tbl_qa_system_operate qso
+     LEFT JOIN tbl_qa_system_menu qsm  ON qsm.operate_id=qso.operate_id and parent_id=0
+	</select>
+	
+	<update id="updateOperate" parameterType="com.xyauto.system.entiy.Operate">
+	 update tbl_qa_system_operate 
+	    <trim prefix="SET" suffixOverrides=",">
+			<if test="mid!=null ">
+				mid = #{mid},
+			</if>
+			<if test="operateName!=null and operateName!='' ">
+				operate_name= #{operateName},
+			</if>
+			<if test="operateType !=null ">
+				operate_type = #{operateType},
+			</if>
+			<if test="url!=null and url!='' ">
+				url = #{url},
+			</if>
+		</trim>
+		where operate_id=#{operateId}
+	</update>
+	
+</mapper>

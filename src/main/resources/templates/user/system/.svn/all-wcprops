@@ -1,0 +1,107 @@
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/xyask_admin/!svn/ver/253/trunk/src/main/resources/templates/user/system
+END
+operateList.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/xyask_admin/!svn/ver/163/trunk/src/main/resources/templates/user/system/operateList.ftl
+END
+menuListCom.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/xyask_admin/!svn/ver/163/trunk/src/main/resources/templates/user/system/menuListCom.ftl
+END
+menuList.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/xyask_admin/!svn/ver/163/trunk/src/main/resources/templates/user/system/menuList.ftl
+END
+jobListCom.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/xyask_admin/!svn/ver/253/trunk/src/main/resources/templates/user/system/jobListCom.ftl
+END
+jobList.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/xyask_admin/!svn/ver/253/trunk/src/main/resources/templates/user/system/jobList.ftl
+END
+toEditUserOperate.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/xyask_admin/!svn/ver/166/trunk/src/main/resources/templates/user/system/toEditUserOperate.ftl
+END
+toEditOperate.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/xyask_admin/!svn/ver/163/trunk/src/main/resources/templates/user/system/toEditOperate.ftl
+END
+userListCom.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/xyask_admin/!svn/ver/166/trunk/src/main/resources/templates/user/system/userListCom.ftl
+END
+userList.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/xyask_admin/!svn/ver/162/trunk/src/main/resources/templates/user/system/userList.ftl
+END
+toAddOperate.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/xyask_admin/!svn/ver/163/trunk/src/main/resources/templates/user/system/toAddOperate.ftl
+END
+toEditMenu.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/xyask_admin/!svn/ver/163/trunk/src/main/resources/templates/user/system/toEditMenu.ftl
+END
+toAddMenu.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/xyask_admin/!svn/ver/163/trunk/src/main/resources/templates/user/system/toAddMenu.ftl
+END
+toUpdateJob.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/xyask_admin/!svn/ver/253/trunk/src/main/resources/templates/user/system/toUpdateJob.ftl
+END
+toAddJob.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/xyask_admin/!svn/ver/253/trunk/src/main/resources/templates/user/system/toAddJob.ftl
+END
+left.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/xyask_admin/!svn/ver/195/trunk/src/main/resources/templates/user/system/left.ftl
+END
+operateListCom.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/xyask_admin/!svn/ver/163/trunk/src/main/resources/templates/user/system/operateListCom.ftl
+END
+toAddUser.ftl
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/xyask_admin/!svn/ver/162/trunk/src/main/resources/templates/user/system/toAddUser.ftl
+END

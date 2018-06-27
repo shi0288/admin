@@ -1,0 +1,35 @@
+package com.xyauto.qa.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.mysql.fabric.xmlrpc.base.Array;
+import com.xyauto.qa.entity.SpiderQuestion;
+import com.xyauto.qa.entity.vo.SpiderQuestionVo;
+import com.xyauto.qa.mapper.SpiderQuestionMapper;
+import com.xyauto.qa.service.ISpiderQuestionService;
+
+@Service
+public class SpiderQuestionServiceImpl  implements
+		ISpiderQuestionService {
+	
+	private SpiderQuestionMapper spiderQuestionMapper;
+	@Override
+	public Page<SpiderQuestionVo> selectByPage(SpiderQuestion spiderQuestion) {
+		PageInfo<SpiderQuestion> pageInfo = PageHelper.startPage(spiderQuestion.getPageNum(),
+				10).doSelectPageInfo(
+				() -> spiderQuestionMapper.select(spiderQuestion));
+		List<SpiderQuestionVo> list=new ArrayList<SpiderQuestionVo>();
+		for (SpiderQuestion spiderQuestion1 : pageInfo.getList()) {
+			
+		}
+		
+		return null;
+	}
+
+}
